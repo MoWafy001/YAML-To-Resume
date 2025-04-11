@@ -8,24 +8,19 @@ template: Default
 primary color: "222222"
 
 summary: |
-  Software Engineer with 3-4 years of experience specializing in back-end development, with additional expertise in front-end development and DevOps.
-  A passionate Linux enthusiast. I enjoy coding and building projects, even if they are solely for personal use—like the script I wrote just to generate this resume. Known for the ability to quickly adapt to new environments and acquire new skills to tackle challenges effectively.
+  Experienced Software Engineer with 4+ years of experience specializing in backend web development. I also have a strong background in frontend, Linux, and DevOps. Adaptable and quick to learn, I excel at solving complex problems and seamlessly integrating new technologies into my workflow.
   
 skills:
   - API Development
   - AWS
   - Agile
-  - C++
   - CI/CD
-  - CSS
   - Cloud
   - Database Design
   - Django
   - Docker
   - Flask
   - Git
-  - Googling
-  - Java
   - JavaScript
   - Laravel
   - Linux
@@ -34,7 +29,7 @@ skills:
   - NoSQL
   - NodeJS
   - PHP
-  - Postman
+  - Prisma
   - Python
   - REST
   - React
@@ -49,15 +44,15 @@ skills:
 
 experience:
   - Backend Software Engineer, Freelance:
-      - Feb 2024 - Present (10 months)
+      - Feb 2024 - Apr 2025 (1 year and 2 months)
       - |
-        During this period of freelancing, I worked with clients from different countries, like the US, Germany, Egypt, and Saudi Arabia.
-        I designed, developed and deployed frontend, backend, and desktop applications.
-        I was not limited to a single stack or type of projects, as shown in the list of highlighted skils below.
+        - Worked with clients from different countries; the United States, Germany, Egypt, and Saudi Arabia.
+        - Designed, developed and deployed frontend, backend, and desktop applications.
+        - Developed using various technologies including NestJS, Flask, PHP, Laravel, SQL, NoSQL, Linux, and Python.
         
         Highlighted skills: NestJS - Back-End Web Development - Microservices - Flask - React.js - PHP - Laravel - SQL - NoSQL - Linux - Python
 
-  - Junior Backend Developer, Owais Capital:
+  - Backend Developer, Owais Capital:
       - May 2023 - Feb 2024 (10 months)
       - |
         Designed and implemented new features for a FinTech application following the micro services architecture while using Kubernetes

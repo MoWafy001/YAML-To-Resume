@@ -1,0 +1,5 @@
+# $ = current dir
+inherit:
+  - $/components/developer.component.yaml
+  
+job title: Untitled
