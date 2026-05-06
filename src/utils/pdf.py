@@ -37,7 +37,7 @@ def __create_pdf(htmlstr, file_name, template_dir):
     print(f"{file_name} created successfully at {output_dir}")
 
 
-def create_resume(file_path, template, output_name):
+def create_resume(file_path, template, output_name = None):
     yaml_resume = YAMLResume(file_path)
     template = template if template else yaml_resume.get('template')
     template = template if template else get_configuration('default_template')
@@ -66,3 +66,24 @@ def create_resume(file_path, template, output_name):
         html, 
         output_name if output_name else file_name, 
         str(template_dir.absolute()))
+
+def create_resume_or_resumes(file_or_dir_path, template, output_name = None):
+    if os.path.isdir(file_or_dir_path):
+        yaml_files = [
+            os.path.join(file_or_dir_path, file)
+            for file in os.listdir(file_or_dir_path)
+            if file.endswith('.yaml') or file.endswith('.yml')
+        ]
+        print("Processing directory:", file_or_dir_path)
+        if output_name:
+            print("Output name provided, but multiple files found. Output name will be ignored.")
+        print(f"Found {len(yaml_files)} files.")
+
+        for file in yaml_files:
+            create_resume(
+                file,
+                template
+            )
+    else:
+        print("Processing file:", file_or_dir_path)
+        create_resume(file_or_dir_path, template, output_name)
