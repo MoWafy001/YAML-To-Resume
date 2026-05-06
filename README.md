@@ -1,19 +1,69 @@
 ![image](https://user-images.githubusercontent.com/47895671/232782487-3b04eaaf-c40b-442e-8085-d92e4ceb4242.png)
 
 # Resume Creator
-This python script creates PDF resumes using variables from a YAML file. You can give it a YAML file to use, or a directory if you want to process multiple YAML files one after another. If no file name, or directory was passed, it will look for `vars.yaml` as its input YAML file by default.
 
-# Install requirements
-Installing the required libraries
+> [!WARNING]
+> This project is currently a **Work in Progress**. The CLI interface and features are subject to change.
+
+This python script creates PDF resumes using variables from a YAML file. 
+
+# Installation
+
+For now, this package is not published yet. 
+
+### Method 1: Install as a CLI tool (Recommended)
+To use the `yaml-to-resume` command globally in your environment:
+```bash
+pip install -e .
 ```
-pip install -r requirements.txt
-```
-or pip3 for python3
+
+### Method 2: Manual Setup (Running as a script)
+If you prefer not to install the package, you can set up a virtual environment and run the script directly:
+
+1. **Create and activate a virtual environment:**
+   ```bash
+   python3 -m venv venv
+   source venv/bin/activate  # On Linux/macOS
+   # OR
+   .\venv\Scripts\activate   # On Windows
+   ```
+
+2. **Install requirements:**
+   ```bash
+   pip install -r requirements.txt
+   ```
+
+3. **Run the tool:**
+   ```bash
+   python3 src/main.py build resume.yaml
+   ```
 
 # Usage
-1. Add the data you want to display in the resume to `vars.yaml` or the YAML file you want to use. Some fields are requried and some aren't, depending on the template.
 
-Look in the `yamls` directory for examples.
+## Using the CLI
+
+Once installed via Method 1, you can use the `yaml-to-resume` command:
+
+```bash
+# Basic usage with a yaml file
+yaml-to-resume build resume.yaml
+
+# Specify a template
+yaml-to-resume build resume.yaml --template Default
+
+# Specify an output path or directory
+yaml-to-resume build resume.yaml -o my_resume.pdf
+yaml-to-resume build resume.yaml -o exports/
+
+# Use a custom configuration file
+yaml-to-resume build resume.yaml --configs custom_config.yaml
+```
+
+## Configuration
+
+1. Add the data you want to display in the resume to `vars.yaml` or any YAML file you want to use. Some fields are requried and some aren't, depending on the template.
+
+Look in the `examples` directory for examples.
 
 ```yaml
 template: Default
@@ -122,19 +172,6 @@ education:
     - |
       Highlighted skills:
       Python
-```
-2. run the script
-```bash
-# this will use vars.yaml by default
-python3 script.py
-```
-```bash
-# this will use a specific yaml file
-python3 script.py file.yaml
-```
-```bash
-# This will look for a directory named "yamls" and process all the yaml files in it, one by one
-python3 script.py yamls
 ```
 
 # Output
