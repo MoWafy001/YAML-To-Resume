@@ -1,17 +1,16 @@
 import yaml
 import os
 
-
-class VarsReader:
-    def __init__(self, vars_path='vars.yaml'):
-        if vars_path.startswith('/'):
-            self.current_dir = '/'.join(vars_path.split('/')[:-1])
+class YAMLResume:
+    def __init__(self, file_path='vars.yaml'):
+        if file_path.startswith('/'):
+            self.current_dir = '/'.join(file_path.split('/')[:-1])
         else:
             self.current_dir = os.getcwd() + '/' + \
-                '/'.join(vars_path.split('/')[:-1])
+                '/'.join(file_path.split('/')[:-1])
 
         self.vars_d = {}
-        self.open_yaml(vars_path)
+        self.open_yaml(file_path)
 
     def open_yaml(self, vars_path, vars_path_dir=None):
         if vars_path.startswith("$"):
@@ -49,7 +48,7 @@ class VarsReader:
         if isinstance(inherit, str):
             self.open_yaml(inherit, vars_path)
 
-    def get_var(self, var_name):
+    def get(self, var_name):
         if var_name not in self.vars_d:
             raise Exception(f'({var_name}) not found')
         else:

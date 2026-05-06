@@ -1,5 +1,52 @@
-env/
-*.pdf
-__pycache__/
+# --- Project Specifics ---
+out/
 vars.yaml
-*.swp
+
+# --- Python Essentials ---
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Virtual Environments
+venv/
+.venv/
+env/
+# For specialized environments like Conda
+.conda/
+
+# --- Packaging & Distribution (Crucial for your CLI tool) ---
+# These are generated when you run 'pip install -e .' or 'python -m build'
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# --- Secrets & Config ---
+# Ensure your medical backend API keys or DB credentials don't leak
+.env
+.secrets
+instance/
+.python-version
+
+# --- Testing & Type Checking ---
+.pytest_cache/
+.tox/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# --- Editor & OS (Neovim / Linux) ---
+# Neovim swap files and undo history
+[._]*.s[a-v][a-z]
+[._]*.sw[a-p]
+*.un~
+Session.vim
+.netrwhist
+
+# OS generated files
+.DS_Store
+.directory
+.LSOverride

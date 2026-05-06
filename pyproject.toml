@@ -1,0 +1,17 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "yaml-to-resume"
+version = "0.1.0"
+description = "Builds resumes from YAML files"
+dependencies = ['PyYAML', 'weasyprint', 'platformdirs']
+
+[tool.setuptools.package-data]
+# This tells the build system to include these file types inside the assets folder
+"assets" = ["*.yaml", "templates/*.html"]
+
+[project.scripts]
+# "command_name" = "package.module:function"
+yaml-to-resume = "main:run"
