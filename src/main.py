@@ -21,7 +21,7 @@ def run():
 
     # Load configurations
     load_configurations(
-        configs_file_path=cli_arguments.configs # if None, will default to CONFIG_DIR
+        configs_file_path=cli_arguments.configs if 'configs' in cli_arguments else None
     )
 
     # build mode

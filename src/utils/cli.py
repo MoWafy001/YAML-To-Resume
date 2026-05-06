@@ -43,6 +43,45 @@ def parse_cli_arguments():
         help="Automatically confirm all prompts."
     )
 
+    # --- 'new' Command ---
+    new_parser = subparsers.add_parser(
+        'new', 
+        help="Create a new yaml resume or html template."
+    )
+    
+    # Nested Subparsers for 'new'
+    new_subparsers = new_parser.add_subparsers(
+        dest="new_type", 
+        required=True, 
+        help="Type of artifact to create"
+    )
+
+    # --- 'new yaml' ---
+    new_yaml_parser = new_subparsers.add_parser(
+        'yaml', 
+        help="Create a new YAML resume."
+    )
+    new_yaml_parser.add_argument(
+        "filename",
+        help="Name/path of the new YAML file."
+    )
+    new_yaml_parser.add_argument(
+        "--inherit", "-i",
+        action="append", # <--- This is the magic change
+        metavar="YAML_FILE",
+        help="A YAML file to inherit data from. Can be used multiple times."
+    )
+
+    # --- 'new template' ---
+    new_template_parser = new_subparsers.add_parser(
+        'template', 
+        help="Create a new starter template folder in the configured templates directory."
+    )
+    new_template_parser.add_argument(
+        "name",
+        help="Name of the new HTML template."
+    )
+
     # --- 'config' Command ---
     config_parser = subparsers.add_parser(
         'config',
