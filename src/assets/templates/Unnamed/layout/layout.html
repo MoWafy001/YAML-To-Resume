@@ -1,30 +1,39 @@
 <html>
-
   <head>
-
     <style>
       :root{
-          --primary-color: #$primary color$;
-          --primary-color-light: #$primary color$66;
-          --primary-color-very-light: #$primary color$11;
+          --primary-color: #{{ primary_color if primary_color else '000000' }};
+          --primary-color-light: #{{ primary_color if primary_color else '000000' }}66;
+          --primary-color-very-light: #{{ primary_color if primary_color else '000000' }}11;
       }
     </style>
-
   </head>
-
   <body>
     <div class="content">
       <div class="col">
-        %block% header %block%
-        %block% summary %block%
-        %block% skills %block%
+        {% for block in blocks if block.block_type == 'header' %}{% include 'layout/header.html' %}{% endfor %}
+        {% for block in blocks if block.block_type == 'summary' %}{% include 'layout/summary.html' %}{% endfor %}
+        {% for block in blocks if block.block_type == 'skills' %}{% include 'layout/skills.html' %}{% endfor %}
       </div>
       <div class="col">
-        %block% experience %block%
-        %block% education? %block%
-        %block% projects? %block%
+        {% for block in blocks if block.block_type == 'experience' %}
+            {% if loop.first %}<section class="experience"><h1 class="section-title">Experience</h1>{% endif %}
+            {% include 'layout/experience.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
+
+        {% for block in blocks if block.block_type == 'education' %}
+            {% if loop.first %}<section class="education"><h1 class="section-title">Education</h1>{% endif %}
+            {% include 'layout/education.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
+
+        {% for block in blocks if block.block_type == 'projects' %}
+            {% if loop.first %}<section class="projects"><h1 class="section-title">Projects</h1>{% endif %}
+            {% include 'layout/projects.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
       </div>
     </div>
   </body>
-
 </html>

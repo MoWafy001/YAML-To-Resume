@@ -6,7 +6,7 @@ build-backend = "setuptools.build_meta"
 name = "yaml-to-resume"
 version = "0.1.0"
 description = "Builds resumes from YAML files"
-dependencies = ['PyYAML', 'weasyprint', 'platformdirs']
+dependencies = ['PyYAML', 'weasyprint', 'platformdirs', 'jinja2']
 
 [tool.setuptools.package-data]
 # This tells the build system to include these file types inside the assets folder

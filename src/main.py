@@ -22,8 +22,10 @@ def handle_build_command(cli_arguments):
 
 def handle_new_command(cli_arguments):
     if cli_arguments.new_type == "yaml":
+        # TODO
         raise NotImplementedError("YAML resume creation is not implemented yet.")
     elif cli_arguments.new_type == "template":
+        # TODO
         raise NotImplementedError("Template resume creation is not implemented yet.")
     else:
         raise ValueError(f"Unknown new type: {cli_arguments.new_type}")

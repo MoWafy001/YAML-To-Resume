@@ -1,9 +1,8 @@
 from weasyprint import HTML, CSS
 import os
 import pathlib
-
+from jinja2 import Environment, FileSystemLoader
 from utils.configuration import get_configuration
-from utils.html import TemplateEngine
 from utils.yaml_resume import YAMLResume
 
 def __create_pdf(htmlstr, file_name, template_dir):
@@ -56,15 +55,27 @@ def create_resume(file_path, template, output_name = None):
     if not layout_path.exists():
         raise FileNotFoundError(f"Layout file not found at {layout_path}. Please ensure the template directory contains a 'layout/layout.html' file and that the template name is valid. Example: 'Default'")
 
-    # render the template
-    engine = TemplateEngine(
-        str(layout_path.absolute()), yaml_resume.get)
-    html, file_name = engine.render()
+    file_loader = FileSystemLoader(str(template_dir.absolute()))
+    env = Environment(loader=file_loader, autoescape=True)
+    template = env.get_template('layout/layout.html')
+    
+    render_vars = {
+        'blocks': yaml_resume.content,
+        'name': yaml_resume.name,
+        'job_title': yaml_resume.job_title,
+    }
+    resume_data = yaml_resume.get('resume')
+    if isinstance(resume_data, dict):
+        for k, v in resume_data.items():
+            if k not in render_vars and k != 'content':
+                render_vars[k.replace(' ', '_')] = v
+
+    html = template.render(**render_vars)
 
     # create the pdf
     __create_pdf(
         html, 
-        output_name if output_name else file_name, 
+        output_name if output_name else yaml_resume.output if yaml_resume.output else f"{yaml_resume.name}_{yaml_resume.job_title}", 
         str(template_dir.absolute()))
 
 def create_resume_or_resumes(file_or_dir_path, template, output_name = None):

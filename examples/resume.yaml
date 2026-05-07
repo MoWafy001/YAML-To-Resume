@@ -1,5 +1,120 @@
-# $ = current dir
-inherit:
-  - $/components/developer.component.yaml
-  
-job title: Software Developer
+
+# How to create a resume
+# You can create a resume using YAML format.
+# There is a main `resume` key that contains all the information. this is required.
+# the contents of the resume to be displayed will be in the `content` field inside the `resume` key.
+# `content` accepts content of any yaml structure; scalar, list, or map
+# a list can have a value of either a scalar or a map or other lists too. the type of content is nested
+# maps can be interpreted as either a block object or a string formatted as map
+# if the map has a type key, then it is treated as a specific block type, otherwise, it will be rendered as plain text
+# for blocks, all blocks have a `type` key, and depending on the type, there are other keys, but most of then have a `content` key
+# available block types are:
+# -- standard types. should be supported but all templates
+# - header (header content)
+# - text (same as plain text, not really needed to be used)
+# - section (a distinct section of content with a title, similar to text but with a title)
+# - container (a layout container for grouping blocks, can be horizontal or vertical)
+# -- special types. these are less common and may not be supported by all templates, will be ignored with a warning if not supported
+# -- examples:
+# - footer (footer content)
+# - profile pic (profile picture content)
+
+
+resume:
+  # inherit: "base_resume.yaml" # for one resume
+  inherit: # for multiple (the order matters, last will overwrite if both share same keys)
+    - "base_resume.yaml"
+    - "custom_resume.yaml"
+  name: "John Doe"
+  job title: "Software Engineer"
+  output: "resume.pdf" # optional and can be inferred from the name and job title instead
+  content:
+    - header: # (if the key matches an template keyword, the template will render it with specific style, otherwise, it will be rendered as a section and the key will be its title)
+      - location: "San Francisco, CA"
+      - email: "john.doe@example.com"
+      - phone: "(123) 456-7890"
+      - profile picture: "john_doe_profile_pic.jpg"
+    - summary: |
+        Highly motivated software engineer with 5+ years of experience in developing scalable web applications
+    - skills: 
+      - Python
+      - JavaScript
+      - React
+      - Node.js
+      - something
+    - education: # list of maps
+      - name: Bachelor of Science in Computer Science
+        institution: University of Technology
+        date: 2018
+        field_of_study: Computer Science
+        description: "Graduated with honors, GPA: 3.8/4.0"
+      - name: Master of Science in Software Engineering
+        institution: University of Technology
+        date: 2020
+        field_of_study: Software Engineering
+        description: "Graduated with honors, GPA: 3.9/4.0"
+    - experience: # list of maps
+      - company: Tech Solutions
+        role: Software Engineer
+        duration: Jan 2020 - Present
+        location: San Francisco, CA
+        description:
+          - Developed and maintained web applications using React and Node.js.
+          - Collaborated with cross-functional teams to define and implement new features.
+      - company: Web Innovations
+        role: Junior Developer
+        duration: Jun 2018 - Dec 2019
+        description:
+          - Assisted in the development of e-commerce websites using Python and Django.
+          - Participated in code reviews and contributed to team knowledge sharing.
+
+# resume:
+#   content:
+#     - type: header
+#       content: "John Doe's Resume"
+#     - type: section
+#       title: "Summary"
+#       content: "Highly motivated software engineer with 5+ years of experience in developing scalable web applications."
+#     - type: section
+#       title: "Skills"
+#       content:
+#         - Python
+#         - JavaScript
+#         - React
+#         - Node.js
+#     - type: section
+#       title: "Experience"
+#       content:
+#         - company: Tech Solutions
+#           role: Software Engineer
+#           duration: Jan 2020 - Present
+#           responsibilities:
+#             - Developed and maintained web applications using React and Node.js.
+#             - Collaborated with cross-functional teams to define and implement new features.
+#         - company: Web Innovations
+#           role: Junior Developer
+#           duration: Jun 2018 - Dec 2019
+#           responsibilities:
+#             - Assisted in the development of e-commerce websites using Python and Django.
+#             - Participated in code reviews and contributed to team knowledge sharing.
+#     - type: section
+#       title: "Education"
+#       content:
+#         - degree: Bachelor of Science in Computer Science
+#           institution: University of Technology
+#           graduation_year: 2018
+#     - type: container
+#       direction: horizontal
+#       content:
+#         - type: section
+#           title: "Contact Information"
+#           content:
+#             - Email: john.doe@example.com
+#             - Phone: (123) 456-7890
+#         - type: section
+#           title: "Summary"
+#           content: 
+#             - type: text
+#               content: "Highly motivated software engineer with 5+ years of experience in developing scalable web applications."
+#     - type: footer
+#       content: "Contact: John Doe, (123) 456-7890, john.doe@example.com"

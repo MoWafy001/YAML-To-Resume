@@ -1,14 +1,42 @@
 <html>
-
   <body>
-    %block% header %block%
+    {% for block in blocks if block.block_type == 'header' %}
+        {% include 'layout/header.html' %}
+    {% endfor %}
     <div class="content">
-      %block% summary %block%
-      %block% skills %block%
-      %block% experience %block%
-      %block% education? %block%
-      %block% projects? %block%
+      {% for block in blocks if block.block_type == 'summary' %}
+          {% include 'layout/summary.html' %}
+      {% endfor %}
+      {% for block in blocks if block.block_type == 'skills' %}
+          {% include 'layout/skills.html' %}
+      {% endfor %}
+      
+      {% for block in blocks if block.block_type == 'experience' %}
+          {% if loop.first %}
+              <section class="experience">
+                  <h1 class="section-title">Experience</h1>
+          {% endif %}
+          {% include 'layout/experience.html' %}
+          {% if loop.last %}</section>{% endif %}
+      {% endfor %}
+
+      {% for block in blocks if block.block_type == 'education' %}
+          {% if loop.first %}
+              <section class="education">
+                  <h1 class="section-title">Education</h1>
+          {% endif %}
+          {% include 'layout/education.html' %}
+          {% if loop.last %}</section>{% endif %}
+      {% endfor %}
+
+      {% for block in blocks if block.block_type == 'projects' %}
+          {% if loop.first %}
+              <section class="projects">
+                  <h1 class="section-title">Projects</h1>
+          {% endif %}
+          {% include 'layout/projects.html' %}
+          {% if loop.last %}</section>{% endif %}
+      {% endfor %}
     </div>
   </body>
-
 </html>

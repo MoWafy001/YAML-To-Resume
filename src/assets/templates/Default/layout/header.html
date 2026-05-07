@@ -1,12 +1,14 @@
 <header>
-    <h1 class="full-name">$full name$</h1>
-    <h2 class="job-title">$job title$</h2>
+    <h1 class="full-name">{{ block.name }}</h1>
+    <h2 class="job-title">{{ block.job_title }}</h2>
     <div class="links">
-        ||links||
-        <a href="|+|links_val|+|" class="link clickable">|+|links_key|+|</a>
-        ||
-        ||not_links||
-        <span class="link">|+|not_links_val|+|</span>
-        ||
+        {% for key, value in block.other_info.items() %}
+            {% if value is string and (value.startswith('http') or '@' in value or value.endswith('.com') or value.endswith('.org')) %}
+                <!-- <a href="{{ value }}">{{ key }}</a> -->
+                <span class="link">{{ value }}</span>
+            {% else %}
+                <span class="link">{{ value }}</span>
+            {% endif %}
+        {% endfor %}
     </div>
 </header>
