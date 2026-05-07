@@ -81,6 +81,10 @@ def parse_cli_arguments():
         "name",
         help="Name of the new HTML template."
     )
+    new_template_parser.add_argument(
+        "--output", "-o",
+        help="Custom directory to store the new template. Defaults to the configured templates directory."
+    )
 
     # --- 'config' Command ---
     config_parser = subparsers.add_parser(
