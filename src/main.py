@@ -2,6 +2,7 @@ from consts import CONFIG_DIR
 from utils.cli import parse_cli_arguments
 from utils.configuration import get_configuration, has_no_configurations, initialize_reinitialize_configurations, load_configurations
 from utils.pdf import create_resume_or_resumes
+from utils.new import create_new_template, create_new_yaml_resume
 
 
 def handle_init_command(cli_arguments):
@@ -22,9 +23,9 @@ def handle_build_command(cli_arguments):
 
 def handle_new_command(cli_arguments):
     if cli_arguments.new_type == "yaml":
-        raise NotImplementedError("YAML resume creation is not implemented yet.")
+        create_new_yaml_resume(cli_arguments.filename, cli_arguments.inherit)
     elif cli_arguments.new_type == "template":
-        raise NotImplementedError("Template resume creation is not implemented yet.")
+        create_new_template(cli_arguments.name, cli_arguments.output)
     else:
         raise ValueError(f"Unknown new type: {cli_arguments.new_type}")
 
