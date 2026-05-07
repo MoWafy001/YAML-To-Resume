@@ -32,8 +32,8 @@ resume:
     - header: # (if the key matches an template keyword, the template will render it with specific style, otherwise, it will be rendered as a section and the key will be its title)
       - location: "San Francisco, CA"
       - email: "john.doe@example.com"
-      - phone: "(123) 456-7890"
-      - profile picture: "john_doe_profile_pic.jpg"
+      - phone: "+1(123) 456-7890"
+      - profile_picture: "john_doe_profile_pic.jpg"
     - summary: |
         Highly motivated software engineer with 5+ years of experience in developing scalable web applications
     - skills: 

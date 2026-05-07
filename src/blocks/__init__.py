@@ -8,11 +8,13 @@ class HeaderBlock(Block):
         self, 
         name, 
         job_title,
+        profile_picture = None,
         **kwargs
     ):
         super().__init__('header')
         self.name = name
         self.job_title = job_title
+        self.profile_picture = profile_picture
         self.other_info = kwargs
 
 

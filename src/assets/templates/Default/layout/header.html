@@ -4,8 +4,7 @@
     <div class="links">
         {% for key, value in block.other_info.items() %}
             {% if value is string and (value.startswith('http') or '@' in value or value.endswith('.com') or value.endswith('.org')) %}
-                <!-- <a href="{{ value }}">{{ key }}</a> -->
-                <span class="link">{{ value }}</span>
+                <a href="{{ value }}" class="link clickable">{{ key }}</a>
             {% else %}
                 <span class="link">{{ value }}</span>
             {% endif %}
