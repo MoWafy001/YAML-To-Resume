@@ -1,0 +1,32 @@
+resume:
+  name: "John Smith"
+  job_title: "Full Stack Developer"
+  primary_color: "000000"
+  content:
+    - header:
+      - email: "john.smith@example.com"
+      - phone: "+1 (555) 123-4567"
+      - LinkedIn: "https://linkedin.com/in/johnsmith"
+      - GitHub: "https://github.com/johnsmith"
+      - location: "New York, NY"
+      - https://github.com/johnsmith
+    - summary: |
+        Experienced Full Stack Developer with 5+ years of experience in building 
+        scalable web applications. Proficient in modern JavaScript frameworks 
+        and backend technologies.
+    - skills: ["JavaScript (ES6+)", "React", "Node.js", "PostgreSQL", "Docker", "AWS"]
+    - experience:
+      - company: "Tech Innovations Inc."
+        role: "Senior Developer"
+        duration: "Jan 2020 - Present"
+        location: "Remote"
+        description:
+          - Led the development of a microservices-based e-commerce platform.
+          - Optimized database queries, reducing API response time by 30%.
+          - Mentored junior developers and conducted code reviews.
+    - education:
+      - degree: "B.S. in Computer Science"
+        institution: "State University"
+        date: "2017"
+        field_of_study: "Software Engineering"
+        description: "Graduated with Honors."

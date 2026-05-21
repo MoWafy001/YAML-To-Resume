@@ -1,10 +1,10 @@
 <html>
   <head>
     <style>
-      :root{
-          --primary-color: #{{ primary_color if primary_color else '000000' }};
-          --primary-color-light: #{{ primary_color if primary_color else '000000' }}66;
-          --primary-color-very-light: #{{ primary_color if primary_color else '000000' }}11;
+      :root {
+          --primary-color: #{{ primary_color if primary_color else '2C3E50' }};
+          --primary-color-light: #{{ primary_color if primary_color else '2C3E50' }}66;
+          --primary-color-very-light: #{{ primary_color if primary_color else '2C3E50' }}11;
       }
     </style>
   </head>
@@ -17,21 +17,18 @@
       </div>
       <div class="col">
         {% for block in blocks if block.block_type == 'experience' %}
-            {% if loop.first %}<section class="experience"><h1 class="section-title">Experience</h1>{% endif %}
+            {% if loop.first %}<h1 class="section-title">Experience</h1>{% endif %}
             {% include 'layout/experience.html' %}
-            {% if loop.last %}</section>{% endif %}
         {% endfor %}
 
         {% for block in blocks if block.block_type == 'education' %}
-            {% if loop.first %}<section class="education"><h1 class="section-title">Education</h1>{% endif %}
+            {% if loop.first %}<h1 class="section-title">Education</h1>{% endif %}
             {% include 'layout/education.html' %}
-            {% if loop.last %}</section>{% endif %}
         {% endfor %}
 
         {% for block in blocks if block.block_type == 'projects' %}
-            {% if loop.first %}<section class="projects"><h1 class="section-title">Projects</h1>{% endif %}
+            {% if loop.first %}<h1 class="section-title">Projects</h1>{% endif %}
             {% include 'layout/projects.html' %}
-            {% if loop.last %}</section>{% endif %}
         {% endfor %}
       </div>
     </div>

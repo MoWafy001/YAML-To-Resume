@@ -1,11 +1,17 @@
 <div class="item">
     <div class="item-row">
         <h2>{{ block.degree }}</h2>
+        {% if block.institution %}
         <span>{{ block.institution }}</span>
+        {% endif %}
     </div>
     <div class="item-row">
+        {% if block.field_of_study %}
         <span>{{ block.field_of_study }}</span>
+        {% endif %}
+        {% if block.date %}
         <span>{{ block.date }}</span>
+        {% endif %}
     </div>
     {% if block.description %}
     <p>{{ block.description }}</p>

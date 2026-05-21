@@ -1,0 +1,7 @@
+resume:
+  inherit: "base.yaml"
+  name: "Inherited Name"
+  job_title: "Inherited Title"
+  content:
+    - summary: "Overridden summary."
+    - skills: ["Inheritance", "Overriding"]

@@ -1,0 +1,10 @@
+resume:
+  name: "Jane Doe"
+  job_title: "Software Engineer"
+  content:
+    - header:
+      - email: "jane.doe@example.com"
+      - "San Francisco, CA"
+      - "Willing to relocate"
+    - summary: "A brief summary of a simple resume."
+    - skills: ["Python", "Git"]

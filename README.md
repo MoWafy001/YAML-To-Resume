@@ -23,24 +23,19 @@ yaml-to-resume new yaml my_resume.yaml
 
 ### 4. Build PDF
 ```bash
-yaml-to-resume build my_resume.yaml
+# 'build' is the default command
+yaml-to-resume my_resume.yaml
 ```
 
 ---
 
 ## Usage Examples
 
-### Create a Custom Template
+### Build Options
 ```bash
-# Create a starter template in the default directory
-yaml-to-resume new template MyModernStyle
+# Explicit build command
+yaml-to-resume build my_resume.yaml
 
-# Or specify a custom directory
-yaml-to-resume new template MyStyle --output ./templates
-```
-
-### Build with Options
-```bash
 # Use a specific template
 yaml-to-resume build my_resume.yaml --template Default
 
@@ -58,8 +53,8 @@ yaml-to-resume build my_resume.yaml -o ./exports/
 ```yaml
 resume:
   name: "John Doe"
-  job title: "Software Engineer"
-  primary color: "008080" # Hex color for templates that support it
+  job_title: "Software Engineer"
+  primary_color: "008080"
   content:
     - header:
         - email: "john.doe@example.com"
@@ -69,11 +64,7 @@ resume:
     - summary: |
         Experienced software engineer with a focus on Python and Cloud architecture.
 
-    - skills:
-        - Python
-        - Docker
-        - AWS
-        - Jinja2
+    - skills: ["Python", "Docker", "AWS", "Jinja2"]
 
     - experience:
         - company: "Tech Corp"
@@ -93,10 +84,9 @@ resume:
 
 ## Configuration
 Templates and global configs are stored in:
-- Linux: `~/.config/yaml-to-resume/`
-- macOS: `~/Library/Application Support/yaml-to-resume/`
-- Windows: `C:\Users\<User>\AppData\Local\yaml-to-resume\`
-
+- Linux: ~/.config/yaml-to-resume/
+- macOS: ~/Library/Application Support/yaml-to-resume/
+- Windows: C:\Users\<User>\AppData\Local\yaml-to-resume
 To find your config path:
 ```bash
 yaml-to-resume config

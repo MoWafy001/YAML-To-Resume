@@ -1,0 +1,7 @@
+resume:
+  name: "Advanced User"
+  job_title: "Generic Professional"
+  content:
+    - header:
+      - location: "Global"
+    - summary: "This summary will be inherited."

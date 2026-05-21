@@ -1,13 +1,22 @@
 <header>
-    <h1 class="full-name">{{ block.name }}</h1>
-    <h2 class="job-title">{{ block.job_title }}</h2>
+    <h1 class="full-name">{{ name }}</h1>
+    <h2 class="job-title">{{ job_title }}</h2>
     <div class="links">
-        {% for key, value in block.other_info.items() %}
-            {% if value is string and (value.startswith('http') or '@' in value or value.endswith('.com') or value.endswith('.org')) %}
-                <a href="{{ value }}" class="link clickable">{{ key }}</a>
-            {% else %}
-                <span class="link">{{ value }}</span>
-            {% endif %}
+        {% for block in blocks if block.block_type == 'header' %}
+            {% for key, value in block.other_info.items() %}
+                {% if value is string and '@' in value %}
+                    <a href="mailto:{{ value }}" class="link clickable">{{ value }}</a>
+                {% elif value is string and (value.startswith('http') or '.com' in value or '.org' in value) %}
+                    <a href="{{ value }}" class="link clickable">{{ key }}</a>
+                {% elif value is string and (value.startswith('+') and value[1:].isdigit()) %}
+                    <a href="tel:{{ value }}" class="link clickable">{{ value }}</a>
+                {% else %}
+                    <span class="link">{{ value }}</span>
+                {% endif %}
+            {% endfor %}
+            {% for extra in block.extras %}
+                <span class="link">{{ extra }}</span>
+            {% endfor %}
         {% endfor %}
     </div>
 </header>

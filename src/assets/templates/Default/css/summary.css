@@ -1,12 +1,6 @@
-.summary{
-    font-size: 0.8rem;
-    padding: 0.5rem;
-    /* code style terminal bg */
-    background: #aaa1;
-    border-radius: 4px;
-    page-break-inside: avoid;
-    box-sizing: border-box;
-    font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-    color: #333;
-    border: 1px solid #0001;
+.summary {
+    font-size: 0.95rem;
+    color: #444;
+    margin: 0;
+    text-align: justify;
 }

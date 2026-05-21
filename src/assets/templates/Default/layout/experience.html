@@ -1,11 +1,17 @@
 <div class="item">
     <div class="item-row">
         <h2>{{ block.job_title }}</h2>
+        {% if block.company %}
         <span>{{ block.company }}</span>
+        {% endif %}
     </div>
     <div class="item-row">
+        {% if block.location %}
         <span>{{ block.location }}</span>
+        {% endif %}
+        {% if block.date_range %}
         <span>{{ block.date_range }}</span>
+        {% endif %}
     </div>
     {% if block.description is string %}
     <p>{{ block.description }}</p>

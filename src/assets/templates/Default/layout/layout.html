@@ -1,4 +1,13 @@
 <html>
+  <head>
+    <style>
+      :root {
+          --primary-color: #{{ primary_color if primary_color else '2C3E50' }};
+          --primary-color-light: #{{ primary_color if primary_color else '2C3E50' }}66;
+          --primary-color-very-light: #{{ primary_color if primary_color else '2C3E50' }}11;
+      }
+    </style>
+  </head>
   <body>
     {% for block in blocks if block.block_type == 'header' %}
         {% include 'layout/header.html' %}

@@ -1,92 +1,81 @@
 body {
-  font-family: 'Arial', sans-serif;
-  background-color: #f9f9f9; 
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background-color: #ffffff;
   color: #333;
   margin: 0;
   padding: 0;
+  line-height: 1.5;
 }
 
 @page {
   size: A4;
-  margin: 1cm;
+  margin: 1.5cm;
 }
 
 .content {
-  padding: 1rem 1.5rem;
-  background-color: #fff; /* White content background */
-  border-radius: 8px;
-  box-sizing: border-box; /* Ensures padding doesn't affect the content width */
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .section-title {
   position: relative;
-  font-weight: normal;
-  font-size: 1.2rem; /* Smaller font size for section titles */
-  margin: 0;
-  margin-bottom: 1rem;
-  color: #2C3E50; /* Dark blue-gray for section titles */
-  line-height: 1.3; /* Better line spacing for titles */
+  font-weight: bold;
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.8rem 0;
+  color: var(--primary-color);
+  text-transform: uppercase;
+  letter-spacing: 1px;
 }
 
 .section-title::after {
   content: "";
-  position: absolute;
-  top: 100%;
-  left: 0;
-  width: 30%;
-  height: 1px; 
-  background: linear-gradient(90deg, #000, teal, #fff); /* Gradient line under the title */
+  display: block;
+  width: 100%;
+  height: 2px;
+  background-color: var(--primary-color-light);
+  margin-top: 2px;
 }
 
 section {
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .item {
-  padding: 0.5rem; /* Reduced padding inside items */
-  margin-bottom: 1rem; /* Reduced bottom margin */
-  box-shadow: 0.5rem 0.3rem 0 0 rgba(44, 62, 80, 0.2), /* Soft shadow with gray tint */
-              -0.2rem 0 0 0 rgba(44, 62, 80, 0.2);
-  background-color: #fff; /* White background for items */
-  border-radius: 6px; /* Rounded corners for items */
+  margin-bottom: 1rem;
   page-break-inside: avoid;
-  box-sizing: border-box; /* Ensures padding doesn't affect item width */
 }
 
 .item-row {
   display: flex;
-  flex-wrap: wrap; /* Allow for wrapping when the screen size is smaller */
-  gap: 1rem; /* Adjusted for better spacing */
-  align-items: flex-start; 
   justify-content: space-between;
-}
-
-.item-row span {
-  white-space: nowrap;
-  font-size: 0.7rem; 
+  align-items: baseline;
 }
 
 .item h2 {
   margin: 0;
-  margin-bottom: 0.8rem; /* Reduced bottom margin */
-  padding: 0;
-  font-size: 1rem; /* Slightly larger font size for item headings */
-  font-weight: bold;
-  color: #34495E; /* Slightly lighter shade for headings */
-  line-height: 1.4; /* Better spacing for readability */
+  font-size: 1rem;
+  color: #222;
+}
+
+.item-row span {
+  font-size: 0.85rem;
+  color: #666;
+  font-style: italic;
 }
 
 .item p {
-  padding: 0.5rem;
-  margin: 0;
-  margin-left: 0.8rem; /* Reduced left margin for compact text */
-  font-size: 0.8rem; /* Smaller font size for paragraph text */
-  line-height: 1.1; /* Improved line height for better readability */
-  background: #aaa1;
-  border-radius: 4px;
-  page-break-inside: avoid;
-  box-sizing: border-box;
-  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-  color: #333;
-  border: 1px solid #0001;
+  margin: 0.3rem 0 0 0;
+  font-size: 0.9rem;
+  color: #444;
+}
+
+.item ul {
+  margin: 0.3rem 0 0 0;
+  padding-left: 1.2rem;
+}
+
+.item li {
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 2px;
 }

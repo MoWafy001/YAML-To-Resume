@@ -5,41 +5,36 @@ from jinja2 import Environment, FileSystemLoader
 from utils.configuration import get_configuration
 from utils.yaml_resume import YAMLResume
 
-def __create_pdf(htmlstr, file_name, template_dir):
-    # Load CSS file paths automatically from the CSS directory
+def __create_pdf(htmlstr, file_path, template_dir):
     css_dir = os.path.join(template_dir, 'css')
 
-    # Default CSS with fallback margins
     default_css = """
     @page {
         size: A4 auto;
-        margin: 0; /* Default margins */
+        margin: 0;
     }
     """
 
-    css_files = [
-        CSS(string=default_css),
-        *[CSS(filename=os.path.join(css_dir, css_file)) for css_file in os.listdir(css_dir) if css_file.endswith('.css')]
-    ]
+    css_files = [CSS(string=default_css)]
+    if os.path.exists(css_dir):
+        css_files.extend([CSS(filename=os.path.join(css_dir, css_file)) for css_file in os.listdir(css_dir) if css_file.endswith('.css')])
 
-
-    # Generate the PDF
-    if not file_name.endswith('.pdf'):
-        file_name += '.pdf'
-
-    output_dir = str(pathlib.Path(file_name).parent.absolute())
+    output_dir = os.path.dirname(os.path.abspath(file_path))
     if not os.path.exists(output_dir):
-        os.mkdir(output_dir)
+        os.makedirs(output_dir, exist_ok=True)
 
-    HTML(string=htmlstr).write_pdf(file_name, stylesheets=css_files)
+    HTML(string=htmlstr).write_pdf(file_path, stylesheets=css_files)
+    print(f"Created successfully: {file_path}")
 
-    print(f"{file_name} created successfully at {output_dir}")
 
-
-def create_resume(file_path, template, output_name = None):
+def create_resume(file_path, template_arg, output_arg = None):
     yaml_resume = YAMLResume(file_path)
-    template = template if template else yaml_resume.get('template')
-    template = template if template else get_configuration('default_template')
+    
+    # Priority: 1. CLI Argument, 2. YAML file, 3. Config default
+    template = template_arg if template_arg else yaml_resume.template
+    if not template:
+        template = get_configuration('default_template')
+    
     template_p = pathlib.Path(template)
 
     if template_p.is_dir():
@@ -53,11 +48,11 @@ def create_resume(file_path, template, output_name = None):
         layout_path = template_dir / 'layout' / 'layout.html'
 
     if not layout_path.exists():
-        raise FileNotFoundError(f"Layout file not found at {layout_path}. Please ensure the template directory contains a 'layout/layout.html' file and that the template name is valid. Example: 'Default'")
+        raise FileNotFoundError(f"Layout file not found at {layout_path}")
 
     file_loader = FileSystemLoader(str(template_dir.absolute()))
     env = Environment(loader=file_loader, autoescape=True)
-    template = env.get_template('layout/layout.html')
+    template_obj = env.get_template('layout/layout.html')
     
     render_vars = {
         'blocks': yaml_resume.content,
@@ -68,33 +63,33 @@ def create_resume(file_path, template, output_name = None):
     if isinstance(resume_data, dict):
         for k, v in resume_data.items():
             if k not in render_vars and k != 'content':
-                render_vars[k.replace(' ', '_')] = v
+                render_vars[k] = v
 
-    html = template.render(**render_vars)
+    html = template_obj.render(**render_vars)
 
-    # create the pdf
-    __create_pdf(
-        html, 
-        output_name if output_name else yaml_resume.output if yaml_resume.output else f"{yaml_resume.name}_{yaml_resume.job_title}", 
-        str(template_dir.absolute()))
+    # Determine final output path
+    default_filename = yaml_resume.output if yaml_resume.output else f"{yaml_resume.name}_{yaml_resume.job_title}"
+    if not default_filename.lower().endswith('.pdf'):
+        default_filename += '.pdf'
+    
+    # sanitize default filename (replace spaces with underscores)
+    default_filename = default_filename.replace(' ', '_')
+
+    if not output_arg:
+        final_output_path = default_filename
+    elif os.path.isdir(output_arg) or output_arg.endswith(('/', '\\')):
+        final_output_path = os.path.join(output_arg, default_filename)
+    else:
+        final_output_path = output_arg
+        if not final_output_path.lower().endswith('.pdf'):
+            final_output_path += '.pdf'
+
+    __create_pdf(html, final_output_path, str(template_dir.absolute()))
 
 def create_resume_or_resumes(file_or_dir_path, template, output_name = None):
     if os.path.isdir(file_or_dir_path):
-        yaml_files = [
-            os.path.join(file_or_dir_path, file)
-            for file in os.listdir(file_or_dir_path)
-            if file.endswith('.yaml') or file.endswith('.yml')
-        ]
-        print("Processing directory:", file_or_dir_path)
-        if output_name:
-            print("Output name provided, but multiple files found. Output name will be ignored.")
-        print(f"Found {len(yaml_files)} files.")
-
-        for file in yaml_files:
-            create_resume(
-                file,
-                template
-            )
+        yaml_files = [os.path.join(file_or_dir_path, f) for f in os.listdir(file_or_dir_path) if f.endswith('.yaml') or f.endswith('.yml')]
+        for f in yaml_files:
+            create_resume(f, template, output_name)
     else:
-        print("Processing file:", file_or_dir_path)
         create_resume(file_or_dir_path, template, output_name)

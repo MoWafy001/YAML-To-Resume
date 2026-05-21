@@ -1,7 +1,0 @@
-# $ = current dir
-inherit:
-  - $/components/developer.component.yaml
-
-primary color: "e0115f"
-
-job title: Ruby Developer

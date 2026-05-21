@@ -1,7 +1,11 @@
 <div class="item">
     <div class="item-row">
         <h2>{{ block.title }}</h2>
+        {% if block.date %}
         <span>{{ block.date }}</span>
+        {% endif %}
     </div>
+    {% if block.description %}
     <p>{{ block.description }}</p>
+    {% endif %}
 </div>

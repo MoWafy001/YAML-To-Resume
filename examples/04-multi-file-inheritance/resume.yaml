@@ -1,0 +1,6 @@
+resume:
+  inherit: ["base.yaml", "contact.yaml"]
+  job_title: "Specialist"
+  content:
+    - summary: "Composition over inheritance."
+    - skills: ["Multi-file inheritance"]
