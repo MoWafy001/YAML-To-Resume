@@ -1,4 +1,4 @@
-<img width="1152" height="740" alt="image" src="https://github.com/user-attachments/assets/81ec9905-3b0b-4629-8756-e2e37321cd1e" />
+<img width="1151" height="743" alt="image" src="https://github.com/user-attachments/assets/a53c997c-9e64-484b-8a19-b5c16090e7e8" />
 
 # YAML-To-Resume
 
