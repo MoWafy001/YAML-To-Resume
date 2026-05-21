@@ -8,9 +8,7 @@ Generate professional PDF resumes from simple YAML files using Jinja2 templates.
 
 ### 1. Install
 ```bash
-git clone https://github.com/MoWafy001/YAML-To-Resume.git
-cd YAML-To-Resume
-pip install -e .
+pip install yaml-to-resume
 ```
 
 ### 2. Initialize
