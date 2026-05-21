@@ -1,10 +1,11 @@
 resume:
-  name: "Jane Doe"
-  job_title: "Software Engineer"
+  name: "Link Tester"
+  job_title: "QA Engineer"
   content:
     - header:
-      - email: "jane.doe@example.com"
-      - "San Francisco, CA"
-      - "Willing to relocate"
-    - summary: "A brief summary of a simple resume."
-    - skills: ["Python", "Git"]
+      - email: "test@example.com"
+      - phone: "+123456789"
+      - "San Francisco"
+      - LinkedIn: "https://linkedin.com/in/test"
+      - Portfolio: "www.test.com"
+    - summary: "Testing all link types."

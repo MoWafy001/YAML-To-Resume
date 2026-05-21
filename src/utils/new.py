@@ -157,9 +157,32 @@ def create_new_template(name, output_dir=None):
   </body>
 </html>"""
 
-    header_content = """<header>
+    header_content = """{% macro render_header_item(key, value) %}
+    {% set val_str = value | string %}
+    {% if val_str and ('@' in val_str or key == 'email') %}
+        <a href="mailto:{{ value }}">{{ value }}</a>
+    {% elif val_str and (val_str.startswith('+') or key == 'phone' or key == 'tel') %}
+        <a href="tel:{{ value }}">{{ value }}</a>
+    {% elif val_str and (val_str.startswith('http') or val_str.startswith('www') or '.com' in val_str or '.org' in val_str or '.net' in val_str) %}
+        <a href="{{ value if val_str.startswith('http') else 'http://' ~ value }}">{{ key if (key and key != 'link' and key != 'url') else value }}</a>
+    {% else %}
+        <span>{{ value }}</span>
+    {% endif %}
+{% endmacro %}
+
+<header>
     <h1>{{ name }}</h1>
     <h2>{{ job_title }}</h2>
+    <div class="links">
+        {% for block in blocks if block.block_type == 'header' %}
+            {% for key, value in block.other_info.items() %}
+                {{ render_header_item(key, value) }}
+            {% endfor %}
+            {% for extra in block.extras %}
+                {{ render_header_item('', extra) }}
+            {% endfor %}
+        {% endfor %}
+    </div>
 </header>"""
 
     files = {
