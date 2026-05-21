@@ -1,3 +1,5 @@
+import yaml
+import sys
 from consts import CONFIG_DIR
 from utils.cli import parse_cli_arguments
 from utils.configuration import get_configuration, has_no_configurations, initialize_reinitialize_configurations, load_configurations
@@ -45,19 +47,30 @@ def handle_command(cli_arguments):
 
 
 def run():
-    cli_arguments = parse_cli_arguments()
+    try:
+        cli_arguments = parse_cli_arguments()
 
-    # Initialize configurations if needed
-    if has_no_configurations():
-        initialize_reinitialize_configurations()
-        return
+        # Initialize configurations if needed
+        if has_no_configurations():
+            initialize_reinitialize_configurations()
+            return
 
-    # Load configurations
-    load_configurations(
-        configs_file_path=cli_arguments.configs if 'configs' in cli_arguments else None
-    )
+        # Load configurations
+        load_configurations(
+            configs_file_path=cli_arguments.configs if 'configs' in cli_arguments else None
+        )
 
-    handle_command(cli_arguments)
+        handle_command(cli_arguments)
+    except FileNotFoundError as e:
+        print(f"Error: {e}")
+        sys.exit(1)
+    except yaml.YAMLError as e:
+        print(f"Error parsing YAML file: {e}")
+        sys.exit(1)
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        sys.exit(1)
+
 
 if __name__ == "__main__":
     run()

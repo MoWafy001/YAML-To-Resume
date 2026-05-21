@@ -115,7 +115,7 @@ def parse_cli_arguments():
     # Build: Template Options
     build_parser.add_argument(
         "--template", "-t",
-        help="Name of a built-in template (e.g., 'modern') or a direct path to a custom .html template."
+        help="Name of a built-in template (e.g., 'Default') or a direct path to a custom template directory."
     )
 
     # Build: Configs
@@ -133,5 +133,9 @@ def parse_cli_arguments():
     # If no command is provided, default to 'build'
     if len(sys.argv) > 1 and sys.argv[1] not in ['init', 'build', 'new', 'config', '-h', '--help']:
         sys.argv.insert(1, 'build')
+
+    if len(sys.argv) == 1:
+        parser.print_help(sys.stderr)
+        sys.exit(1)
 
     return parser.parse_args()
