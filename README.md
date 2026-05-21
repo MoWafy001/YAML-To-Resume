@@ -1,3 +1,5 @@
+<img width="914" height="721" alt="image" src="https://github.com/user-attachments/assets/958cb01e-ec57-4415-b336-d7e2f9289c4e" />
+
 # YAML-To-Resume
 
 Generate professional PDF resumes from simple YAML files using Jinja2 templates.
