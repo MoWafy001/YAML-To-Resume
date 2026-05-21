@@ -6,7 +6,7 @@ from utils.new import create_new_template, create_new_yaml_resume
 
 
 def handle_init_command(cli_arguments):
-    initialize_reinitialize_configurations(cli_arguments.y)
+    initialize_reinitialize_configurations(not cli_arguments.y)
 
 
 def handle_config_command(_):
