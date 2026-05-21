@@ -1,6 +1,9 @@
 import yaml
 import os
 
+from blocks import Block, EducationBlock, ExperienceBlock, HeaderBlock, ProjectsBlock, SkillsBlock, SummaryBlock
+from consts import DEFAULT_TEMPLATE
+
 class YAMLResume:
     def __init__(self, file_path='vars.yaml'):
         if file_path.startswith('/'):
@@ -9,47 +12,115 @@ class YAMLResume:
             self.current_dir = os.getcwd() + '/' + \
                 '/'.join(file_path.split('/')[:-1])
 
-        self.vars_d = {}
-        self.open_yaml(file_path)
+        self.__resume_vars = {}
+        self.__open_yaml(file_path)
 
-    def open_yaml(self, vars_path, vars_path_dir=None):
+        if not self.__resume_vars:
+            raise Exception('Missing the `resume` key')
+
+        # Use snake_case keys consistently
+        self.name = self.__resume_vars.get('name')
+        self.job_title = self.__resume_vars.get('job_title')
+        self.output = self.__resume_vars.get('output')
+        self.content = self.__cast_to_blocks(self.__resume_vars.get('content'))
+        self.template = self.__resume_vars.get('template') if 'template' in self.__resume_vars else DEFAULT_TEMPLATE
+
+    def __open_yaml(self, vars_path, vars_path_dir=None):
         if vars_path.startswith("$"):
             vars_path = vars_path.replace(
                 '$', self.current_dir if vars_path_dir is None else vars_path_dir, 1)
+        
+        if not os.path.isabs(vars_path):
+            if vars_path_dir:
+                vars_path = os.path.join(vars_path_dir, vars_path)
+            else:
+                vars_path = os.path.join(os.getcwd(), vars_path)
+
+        if not os.path.exists(vars_path):
+             return
 
         with open(vars_path) as f:
-            loaded_vars = yaml.safe_load(f)
-            self.apply_vars(loaded_vars)
+            loaded_data = yaml.safe_load(f)
+            if not loaded_data or 'resume' not in loaded_data:
+                return
 
-            self.loadInheritedVars(vars_path)
+            resume_data = loaded_data['resume']
 
-    def apply_vars(self, loaded_vars):
-        # only apply vars if they are not already in vars_d
-        for key, value in loaded_vars.items():
-            if key not in self.vars_d:
-                self.vars_d[key] = value
+            if 'inherit' in resume_data:
+                inherit = resume_data['inherit']
+                current_file_dir = os.path.dirname(os.path.abspath(vars_path))
+                
+                if isinstance(inherit, list):
+                    for i in inherit:
+                        self.__open_yaml(i, current_file_dir)
+                elif isinstance(inherit, str):
+                    self.__open_yaml(inherit, current_file_dir)
 
-    def loadInheritedVars(self, vars_path):
-        if 'inherit' not in self.vars_d:
-            return
-        vars_path = '/'.join(vars_path.split('/')[:-1])
+            self.__apply_resume_vars(resume_data)
 
-        inherit = self.vars_d['inherit']
+    def __apply_resume_vars(self, resume_data):
+        for key, value in resume_data.items():
+            if key != 'inherit':
+                self.__resume_vars[key] = value
 
-        # remove inherit from vars_d
-        self.vars_d.pop('inherit')
+    def __cast_to_blocks(self, content):
+        if not content:
+            return []
 
-        # if inherit is a list
-        if isinstance(inherit, list):
-            for i in inherit:
-                self.open_yaml(i, vars_path)
+        if type(content) is not list:
+            raise TypeError('Content must be a list')
 
-        # if inherit is a string
-        if isinstance(inherit, str):
-            self.open_yaml(inherit, vars_path)
+        blocks: list[Block] = []
+        for item in content:
+            if not isinstance(item, dict):
+                raise TypeError('Each item in content must be a dict')
+            
+            d_keys = list(item.keys())
+            if len(d_keys) != 1:
+                raise ValueError('Each item in content must have exactly one key')
+
+            block_name = d_keys[0]
+            block_data = item[block_name]
+            blockname_to_class = {
+                'header': HeaderBlock,
+                'summary': SummaryBlock,
+                'skills': SkillsBlock,
+                'education': EducationBlock,
+                'experience': ExperienceBlock,
+                'projects': ProjectsBlock
+            }
+
+            block_class = blockname_to_class.get(block_name)
+            if not block_class:
+                raise ValueError(f'Unknown block type: {block_name}')
+
+            if block_name in ['education', 'experience', 'projects'] and isinstance(block_data, list):
+                for sub_item in block_data:
+                    if isinstance(sub_item, dict):
+                        blocks.append(block_class(**sub_item))
+            elif block_name == 'header' and isinstance(block_data, list):
+                header_data = {}
+                extras = []
+                for sub_item in block_data:
+                    if isinstance(sub_item, dict):
+                        header_data.update(sub_item)
+                    else:
+                        extras.append(sub_item)
+                
+                merged_header = {'name': self.name, 'job_title': self.job_title, 'extras': extras}
+                merged_header.update(header_data)
+                blocks.append(block_class(**merged_header))
+            elif isinstance(block_data, dict):
+                blocks.append(block_class(**block_data))
+            else:
+                blocks.append(block_class(block_data))
+
+        return blocks
 
     def get(self, var_name):
-        if var_name not in self.vars_d:
+        if var_name == 'resume':
+            return self.__resume_vars
+        if var_name not in self.__resume_vars:
             raise Exception(f'({var_name}) not found')
         else:
-            return self.vars_d[var_name]
+            return self.__resume_vars[var_name]

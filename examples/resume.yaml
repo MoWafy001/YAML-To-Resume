@@ -1,5 +1,0 @@
-# $ = current dir
-inherit:
-  - $/components/developer.component.yaml
-  
-job title: Software Developer

@@ -1,0 +1,5 @@
+resume:
+  content:
+    - header:
+      - email: "contact@example.com"
+      - phone: "555-0000"

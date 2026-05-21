@@ -1,14 +1,19 @@
-<section class="education">
-    <h1 class="section-title">Education</h1>
-
-    ||education||
-    <div class="item">
-        <div class="item-row">
-            <h2>|+|education_key|+|</h2>
-            <span>|+|education_val_0|+|</span>
-        </div>
-        <p>|+|education_val_1|+|</p>
+<div class="item">
+    <div class="item-row">
+        <h2>{{ block.degree }}</h2>
+        {% if block.institution %}
+        <span>{{ block.institution }}</span>
+        {% endif %}
     </div>
-    ||
-
-</section>
+    <div class="item-row">
+        {% if block.field_of_study %}
+        <span>{{ block.field_of_study }}</span>
+        {% endif %}
+        {% if block.date %}
+        <span>{{ block.date }}</span>
+        {% endif %}
+    </div>
+    {% if block.description %}
+    <p>{{ block.description }}</p>
+    {% endif %}
+</div>

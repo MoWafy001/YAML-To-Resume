@@ -5,13 +5,27 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "yaml-to-resume"
 version = "0.1.0"
-description = "Builds resumes from YAML files"
-dependencies = ['PyYAML', 'weasyprint', 'platformdirs']
+description = "Builds professional PDF resumes from simple YAML files using Jinja2 templates."
+readme = "README.md"
+requires-python = ">=3.7"
+license = {text = "MIT"}
+authors = [
+    {name = "Mohamed Wafy"}
+]
+keywords = ["resume", "cv", "yaml", "jinja2", "pdf", "weasyprint"]
+dependencies = [
+    "PyYAML",
+    "weasyprint",
+    "platformdirs",
+    "jinja2"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/MoWafy001/YAML-To-Resume"
+"Bug Tracker" = "https://github.com/MoWafy001/YAML-To-Resume/issues"
 
 [tool.setuptools.package-data]
-# This tells the build system to include these file types inside the assets folder
-"assets" = ["*.yaml", "templates/*.html"]
+"assets" = ["*.yaml", "templates/**/*.html", "templates/**/README.md", "templates/**/*.css"]
 
 [project.scripts]
-# "command_name" = "package.module:function"
 yaml-to-resume = "main:run"

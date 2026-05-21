@@ -6,5 +6,8 @@
     },
     "python.analysis.extraPaths": [
         "./src"
-    ]
+    ],
+    "yaml.schemas": {
+        "https://www.schemastore.org/yamlfmt.json": "file:///home/mohamedwafy/projects/YAML-To-Resume/examples/resume.yaml"
+    }
 }

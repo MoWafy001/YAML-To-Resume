@@ -1,14 +1,27 @@
+{% macro render_header_item(key, value) %}
+    {% set val_str = value | string %}
+    {% if val_str and ('@' in val_str or key == 'email') %}
+        <a href="mailto:{{ value }}" class="link clickable">{{ value }}</a>
+    {% elif val_str and (val_str.startswith('+') or key == 'phone' or key == 'tel') %}
+        <a href="tel:{{ value }}" class="link clickable">{{ value }}</a>
+    {% elif val_str and (val_str.startswith('http') or val_str.startswith('www') or '.com' in val_str or '.org' in val_str or '.net' in val_str) %}
+        <a href="{{ value if val_str.startswith('http') else 'http://' ~ value }}" class="link clickable">{{ key if (key and key != 'link' and key != 'url') else value }}</a>
+    {% else %}
+        <span class="link">{{ value }}</span>
+    {% endif %}
+{% endmacro %}
+
 <header>
-    <div>
-        <h1 class="full-name">$full name$</h1>
-        <h2 class="job-title">$job title$</h2>
-    </div>
+    <h1 class="full-name">{{ name }}</h1>
+    <h2 class="job-title">{{ job_title }}</h2>
     <div class="links">
-        ||links||
-        <a href="|+|links_val|+|" class="link clickable">|+|links_key|+|</a>
-        ||
-        ||not_links||
-        <span class="link">|+|not_links_val|+|</span>
-        ||
+        {% for block in blocks if block.block_type == 'header' %}
+            {% for key, value in block.other_info.items() %}
+                {{ render_header_item(key, value) }}
+            {% endfor %}
+            {% for extra in block.extras %}
+                {{ render_header_item('', extra) }}
+            {% endfor %}
+        {% endfor %}
     </div>
 </header>

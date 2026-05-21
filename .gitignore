@@ -50,3 +50,5 @@ Session.vim
 .DS_Store
 .directory
 .LSOverride
+
+*.pdf

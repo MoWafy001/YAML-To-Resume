@@ -1,8 +1,8 @@
 <section class="skills-section">
     <h1 class="section-title">Skills</h1>
     <ul class="skills">
-        ||skills||
-        <li>|+|skills_val|+|</li>
-        ||
+        {% for skill in block.skills %}
+        <li>{{ skill }}</li>
+        {% endfor %}
     </ul>
 </section>

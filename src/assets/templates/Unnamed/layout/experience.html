@@ -1,15 +1,19 @@
-<section class="experience">
-
-    <h1 class="section-title">Experience</h1>
-    
-    ||experience||
-    <div class="item">
-        <div class="item-row">
-            <h2>|+|experience_key|+|</h2>
-            <span>|+|experience_val_0|+|</span>
-        </div>
-        <p>|+|experience_val_1|+|</p>
+<div class="item">
+    <div class="item-row">
+        <h2>{{ block.job_title }}</h2>
+        <span>{{ block.company }}</span>
     </div>
-    ||
-    
-</section>
+    <div class="item-row">
+        <span>{{ block.location }}</span>
+        <span>{{ block.date_range }}</span>
+    </div>
+    {% if block.description is string %}
+    <p>{{ block.description }}</p>
+    {% else %}
+    <ul>
+        {% for line in block.description %}
+        <li>{{ line }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+</div>

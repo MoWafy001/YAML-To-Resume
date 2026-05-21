@@ -1,0 +1,11 @@
+resume:
+  name: "Link Tester"
+  job_title: "QA Engineer"
+  content:
+    - header:
+      - email: "test@example.com"
+      - phone: "+123456789"
+      - "San Francisco"
+      - LinkedIn: "https://linkedin.com/in/test"
+      - Portfolio: "www.test.com"
+    - summary: "Testing all link types."

@@ -1,4 +1,5 @@
 import argparse
+import sys
 
 
 def wait_for_user_confirmation(prompt: str) -> bool:
@@ -10,7 +11,7 @@ def parse_cli_arguments():
     """
     Parse command-line arguments for the YAML to Resume converter.
     Uses subcommands to separate initialization from the conversion logic.
-    
+
     returns: argparse.Namespace with a 'command' attribute to distinguish 
              between 'init' and 'build'.
     """
@@ -22,7 +23,6 @@ def parse_cli_arguments():
     # Creating the subparser handler
     subparsers = parser.add_subparsers(
         dest="command", 
-        required=True, 
         help="Available commands"
     )
 
@@ -48,7 +48,7 @@ def parse_cli_arguments():
         'new', 
         help="Create a new yaml resume or html template."
     )
-    
+
     # Nested Subparsers for 'new'
     new_subparsers = new_parser.add_subparsers(
         dest="new_type", 
@@ -80,6 +80,10 @@ def parse_cli_arguments():
     new_template_parser.add_argument(
         "name",
         help="Name of the new HTML template."
+    )
+    new_template_parser.add_argument(
+        "--output", "-o",
+        help="Custom directory to store the new template. Defaults to the configured templates directory."
     )
 
     # --- 'config' Command ---
@@ -125,5 +129,9 @@ def parse_cli_arguments():
         "-o", "--output", 
         help="The destination path. Can be a filename (ending in .pdf) or a directory path."
     )
+
+    # If no command is provided, default to 'build'
+    if len(sys.argv) > 1 and sys.argv[1] not in ['init', 'build', 'new', 'config', '-h', '--help']:
+        sys.argv.insert(1, 'build')
 
     return parser.parse_args()

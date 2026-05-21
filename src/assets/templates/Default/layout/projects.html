@@ -1,13 +1,11 @@
-<section class="education">
-    <h1 class="section-title">Projects</h1>
-
-    ||projects||
-    <div class="item">
-        <div class="item-row">
-            <h2>|+|projects_key|+|</h2>
-        </div>
-        <p>|+|projects_val_0|+|</p>
+<div class="item">
+    <div class="item-row">
+        <h2>{{ block.title }}</h2>
+        {% if block.date %}
+        <span>{{ block.date }}</span>
+        {% endif %}
     </div>
-    ||
-
-</section>
+    {% if block.description %}
+    <p>{{ block.description }}</p>
+    {% endif %}
+</div>

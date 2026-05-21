@@ -1,17 +1,17 @@
-.skills{
+.skills {
     display: flex;
-    margin: 0 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     padding: 0;
     list-style: none;
-    justify-content: center;
-    flex-wrap: wrap;
+    margin: 0.5rem 0;
 }
-.skills li{
-    display: block;
-    margin: 0.2rem;
-    padding: 0.2rem 0.3rem;
-    font-size: 0.8rem;
-    border: 1px solid #0006;
-    box-shadow: 0.3rem 0.3rem 0 0 #0006;
-    border-radius: .3rem;
+
+.skills li {
+    background-color: var(--primary-color-very-light);
+    color: #333;
+    padding: 0.2rem 0.6rem;
+    border-radius: 4px;
+    font-size: 0.85rem;
+    border: 1px solid var(--primary-color-light);
 }
