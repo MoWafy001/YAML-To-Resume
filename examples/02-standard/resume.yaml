@@ -2,6 +2,7 @@ resume:
   name: "John Smith"
   job_title: "Full Stack Developer"
   primary_color: "000000"
+  template: "Default"
   content:
     - header:
       - email: "john.smith@example.com"

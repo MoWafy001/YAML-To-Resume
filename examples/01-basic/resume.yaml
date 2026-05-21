@@ -1,6 +1,7 @@
 resume:
   name: "Link Tester"
   job_title: "QA Engineer"
+  template: "Default"
   content:
     - header:
       - email: "test@example.com"
