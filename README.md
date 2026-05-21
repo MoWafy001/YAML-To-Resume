@@ -16,78 +16,24 @@ pip install -e .
 yaml-to-resume init -y
 ```
 
-### 3. Create a New Resume
+### 3. Build Resume
 ```bash
-yaml-to-resume new yaml my_resume.yaml
-```
-
-### 4. Build PDF
-```bash
-# 'build' is the default command
-yaml-to-resume my_resume.yaml
+# 'build' is the default command, so you can just pass the file
+yaml-to-resume examples/01-basic/resume.yaml
 ```
 
 ---
 
-## Usage Examples
+## Documentation
 
-### Build Options
-```bash
-# Explicit build command
-yaml-to-resume build my_resume.yaml
+Comprehensive technical references are available in the [docs/](docs/) folder:
 
-# Use a specific template
-yaml-to-resume build my_resume.yaml --template Default
-
-# Custom output filename
-yaml-to-resume build my_resume.yaml -o professional_resume.pdf
-
-# Custom output directory
-yaml-to-resume build my_resume.yaml -o ./exports/
-```
+- **[CLI Tool Reference](docs/cli.md)**: Detailed command usage, flags, and subcommands.
+- **[YAML Resume Schema](docs/yaml_resume.md)**: Full specification for writing resume data files, including all supported block types.
+- **[Template Development Guide](docs/templates.md)**: Technical guide for creating and modifying Jinja2 templates.
 
 ---
 
-## YAML Structure Example (my_resume.yaml)
+## Examples
 
-```yaml
-resume:
-  name: "John Doe"
-  job_title: "Software Engineer"
-  primary_color: "008080"
-  content:
-    - header:
-        - email: "john.doe@example.com"
-        - LinkedIn: "https://linkedin.com/in/johndoe"
-        - location: "New York, NY"
-
-    - summary: |
-        Experienced software engineer with a focus on Python and Cloud architecture.
-
-    - skills: ["Python", "Docker", "AWS", "Jinja2"]
-
-    - experience:
-        - company: "Tech Corp"
-          role: "Senior Developer"
-          duration: "2020 - Present"
-          description:
-            - Led a team of 5 to migrate legacy systems to AWS.
-            - Reduced CI/CD pipeline time by 40%.
-
-    - education:
-        - institution: "State University"
-          degree: "B.S. Computer Science"
-          date: "2019"
-```
-
----
-
-## Configuration
-Templates and global configs are stored in:
-- Linux: ~/.config/yaml-to-resume/
-- macOS: ~/Library/Application Support/yaml-to-resume/
-- Windows: C:\Users\<User>\AppData\Local\yaml-to-resume
-To find your config path:
-```bash
-yaml-to-resume config
-```
+For progressive examples ranging from basic to advanced inheritance, see the [examples/](examples/) directory.
