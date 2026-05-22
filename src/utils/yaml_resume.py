@@ -61,7 +61,18 @@ class YAMLResume:
     def __apply_resume_vars(self, resume_data):
         for key, value in resume_data.items():
             if key != 'inherit':
-                self.__resume_vars[key] = value
+                # deep nested application
+                if isinstance(value, dict):
+                    if key not in self.__resume_vars:
+                        self.__resume_vars[key] = {}
+                    self.__resume_vars[key].update(value)
+                elif isinstance(value, list):
+                    if key not in self.__resume_vars:
+                        self.__resume_vars[key] = []
+                    self.__resume_vars[key].extend(value)
+                else:
+                    self.__resume_vars[key] = value
+                
 
     def __cast_to_blocks(self, content):
         if not content:
