@@ -15,7 +15,7 @@ The resume file is written in YAML. The root object MUST be `resume`.
 | `output` | string | Name of the output PDF file | No |
 | `primary_color` | string | Hex color without # (e.g., "008080") | No |
 | `inherit` | string \| list | Filename(s) to inherit data from | No |
-| `inherit_strategy` | string | Strategy for merging inherited data (`deep`, `shallow`, `override`) | No |
+| `inherit_strategy` | string | Strategy for merging inherited data (`extend`, `overwrite`) | No |
 | `content` | list | List of content blocks | Yes |
 
 ---
