@@ -1,0 +1,72 @@
+# YAML-To-Resume Reference File
+# This file demonstrates all available fields and block types.
+
+resume:
+  # --- Top-Level Metadata ---
+  name: "Full Name"
+  job_title: "Professional Title"
+  
+  # Optional: Name of the template (e.g., "Default") or path to a template directory
+  template: "Default"
+  
+  # Optional: Custom output filename (defaults to name_title.pdf)
+  output: "reference_resume.pdf"
+  
+  # Optional: Theme color in Hex (without #)
+  primary_color: "008080"
+
+  # Optional: Inheritance settings
+  # inherit: "base.yaml" # Path to parent YAML file
+  # inherit_strategy: extend # 'extend' (append lists) or 'overwrite' (replace lists)
+
+  # --- Content Blocks ---
+  # The 'content' field is a list of blocks. Order may or may not matter depending on the template!
+  content:
+    # 1. Header: Contact info and links
+    - header:
+        - email: "user@example.com"
+        - phone: "+1 (555) 000-0000"
+        - location: "City, State"
+        - LinkedIn: "https://linkedin.com/in/username"
+        - GitHub: "https://github.com/username"
+        - "Portfolio: www.example.com" # Plain strings are also allowed
+
+    # 2. Summary: Professional profile
+    - summary: |
+        A brief overview of your professional background and key achievements.
+        Multi-line strings are supported using the '|' character.
+
+    # 3. Skills: List of competencies
+    - skills: ["Python", "JavaScript", "YAML", "Jinja2", "Docker", "AWS"]
+
+    # 4. Experience: Professional history
+    - experience:
+        - company: "Company Name"
+          role: "Job Title"
+          duration: "Jan 2020 - Present"
+          location: "City, State (or Remote)"
+          description:
+            - Key achievement or responsibility
+            - Another bullet point describing your impact
+            - "Used [Tech Stack] to improve [Metric] by [X]%"
+        
+        - company: "Previous Company"
+          role: "Junior Role"
+          duration: "2018 - 2019"
+          description: "A simple string description is also allowed instead of a list."
+
+    # 5. Education: Academic background
+    - education:
+        - institution: "University Name"
+          degree: "Bachelor of Science"
+          study: "Computer Science"
+          duration: "2014 - 2018"
+          description: "Minor in Mathematics, GPA: 3.8/4.0"
+
+    # 6. Projects: Personal or side projects
+    - projects:
+        - name: "Project Title"
+          duration: "2023"
+          description:
+            - "Developed a [Tool] that solves [Problem]"
+            - "Available at: https://github.com/username/project"

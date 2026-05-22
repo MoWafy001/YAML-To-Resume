@@ -1,0 +1,10 @@
+resume:
+  inherit: "base.yaml"
+  inherit_strategy: extend
+  name: "Extend User"
+  job_title: "DevOps Engineer"
+  content:
+    - header:
+      - email: "extend@example.com"
+    - summary: "In 'extend' mode, strings are still overridden, but lists are combined."
+    - skills: ["Extend", "Strategy"] # This will be appended to the base skills list

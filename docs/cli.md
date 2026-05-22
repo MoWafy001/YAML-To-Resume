@@ -13,6 +13,7 @@ Converts YAML data into a PDF resume.
 | `--template` | `-t` | Template name or direct path to `layout.html` | No |
 | `--output` | `-o` | Destination filename (.pdf) or directory | No |
 | `--configs` | - | Path to a custom `config.yaml` override | No |
+| `--verbose` | `-v` | Enable detailed logging for debugging | No |
 
 **Examples:**
 ```bash

@@ -5,7 +5,6 @@ resume:
   content:
     - header:
       - email: "base@example.com"
-      - phone: "555-0000"
       - location: "Base City"
-    - summary: "This summary comes from the base file."
-    - skills: ["Python", "YAML", "Jinja2"]
+    - summary: "Base summary."
+    - skills: ["Python", "YAML"]
