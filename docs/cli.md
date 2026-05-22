@@ -1,6 +1,6 @@
 # CLI Tool Reference
 
-The primary command is `yaml-to-resume`. If no subcommand is provided, the tool defaults to the `build` command.
+The primary command is `yaml-to-resume` (alias `ytr`). If no subcommand is provided, the tool defaults to the `build` command.
 
 ## Subcommands
 
@@ -18,13 +18,13 @@ Converts YAML data into a PDF resume.
 **Examples:**
 ```bash
 # Simple build
-yaml-to-resume resume.yaml
+ytr resume.yaml
 
 # Explicit build with template
-yaml-to-resume build resume.yaml --template Default
+ytr build resume.yaml --template Default
 
 # Build with custom output
-yaml-to-resume resume.yaml -o exports/my_resume.pdf
+ytr resume.yaml -o exports/my_resume.pdf
 ```
 
 ---
@@ -39,10 +39,10 @@ Sets up the default configuration directory and base templates.
 **Examples:**
 ```bash
 # Standard initialization
-yaml-to-resume init
+ytr init
 
 # Forced/Silent initialization
-yaml-to-resume init -y
+ytr init -y
 ```
 
 ---
@@ -58,7 +58,7 @@ Creates starter artifacts.
 
 **Example:**
 ```bash
-yaml-to-resume new yaml my_resume.yaml -i base.yaml
+ytr new yaml my_resume.yaml -i base.yaml
 ```
 
 #### `new template`
@@ -69,7 +69,7 @@ yaml-to-resume new yaml my_resume.yaml -i base.yaml
 
 **Example:**
 ```bash
-yaml-to-resume new template ModernStyle -o ./my_templates
+ytr new template ModernStyle -o ./my_templates
 ```
 
 ---
@@ -79,7 +79,7 @@ Displays the current system configuration paths.
 
 **Example:**
 ```bash
-yaml-to-resume config
+ytr config
 ```
 
 ---

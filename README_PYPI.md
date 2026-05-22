@@ -1,4 +1,4 @@
-# YAML-To-Resume
+# YAML-To-Resume (`ytr`)
 
 Generate professional PDF resumes from simple YAML files using Jinja2 templates.
 
@@ -11,13 +11,14 @@ pip install yaml-to-resume
 
 ### 2. Initialize
 ```bash
-yaml-to-resume init -y
+# You can use the full command or the alias 'ytr'
+ytr init -y
 ```
 
 ### 3. Build Resume
 ```bash
 # 'build' is the default command, so you can just pass the file
-yaml-to-resume examples/01-basic/resume.yaml
+ytr examples/01-basic/resume.yaml
 ```
 
 ---

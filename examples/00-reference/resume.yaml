@@ -42,9 +42,9 @@ resume:
 
     # 4. Experience: Professional history
     - experience:
-        - company: "Company Name"
-          role: "Job Title"
-          duration: "Jan 2020 - Present"
+        - company: "Company Name" # Alternative: name
+          job_title: "Job Title" # Alternative: role
+          date_range: "Jan 2020 - Present" # Alternative: duration
           location: "City, State (or Remote)"
           description:
             - "Key achievement or responsibility with a link: https://example.com"
@@ -52,22 +52,22 @@ resume:
             - "Used [Tech Stack] to improve [Metric] by [X]%"
         
         - company: "Previous Company"
-          role: "Junior Role"
-          duration: "2018 - 2019"
+          job_title: "Junior Role"
+          date_range: "2018 - 2019"
           description: "A simple string description is also allowed instead of a list."
 
     # 5. Education: Academic background
     - education:
         - institution: "University Name"
-          degree: "Bachelor of Science"
-          study: "Computer Science"
-          duration: "2014 - 2018"
+          degree: "Bachelor of Science" # Alternative: name
+          field_of_study: "Computer Science" # Alternative: study
+          date: "2014 - 2018" # Alternative: duration
           description: "Minor in Mathematics, GPA: 3.8/4.0"
 
     # 6. Projects: Personal or side projects
     - projects:
-        - name: "Project Title"
-          duration: "2023"
+        - title: "Project Title" # Alternative: name
+          date: "2023" # Alternative: duration
           description:
             - "Developed a [Tool] that solves [Problem]"
             - "Available at: https://github.com/username/project"

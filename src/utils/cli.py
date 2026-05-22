@@ -17,7 +17,7 @@ def parse_cli_arguments():
     """
     parser = argparse.ArgumentParser(
         prog="yaml-to-resume",
-        description="A CLI tool to convert YAML data into PDF resumes using customizable templates."
+        description="A CLI tool (alias 'ytr') to convert YAML data into PDF resumes using customizable templates."
     )
 
     # Creating the subparser handler

@@ -13,7 +13,7 @@ cp examples/00-reference/resume.yaml my_resume.yaml
 Or build it directly to see how it looks:
 
 ```bash
-yaml-to-resume examples/00-reference/resume.yaml
+ytr examples/00-reference/resume.yaml
 ```
 
 ## Key Features Shown

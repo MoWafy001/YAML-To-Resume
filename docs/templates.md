@@ -11,6 +11,9 @@
 
 ## Block Reference (`block.block_type`)
 
+> [!NOTE]
+> While the YAML schema supports alternative field names (e.g., `role` for `job_title`), they are automatically mapped to the primary attributes listed below when passed to the template context.
+
 ### `header`
 | Attribute | Type | Description | Always Present |
 | :--- | :--- | :--- | :--- |

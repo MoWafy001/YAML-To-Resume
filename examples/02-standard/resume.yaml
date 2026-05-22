@@ -17,8 +17,8 @@ resume:
     - skills: ["JavaScript (ES6+)", "React", "Node.js", "PostgreSQL", "Docker", "AWS"]
     - experience:
       - company: "Tech Innovations Inc."
-        role: "Senior Developer"
-        duration: "Jan 2020 - Present"
+        job_title: "Senior Developer"
+        date_range: "Jan 2020 - Present"
         location: "Remote"
         description:
           - Led the development of a microservices-based e-commerce platform.

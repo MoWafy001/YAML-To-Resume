@@ -19,8 +19,8 @@ resume:
     - skills: ["Python", "Jinja2"]
     - experience:
       - company: "Company Name"
-        role: "Job Title"
-        duration: "Jan 2020 - Present"
+        job_title: "Job Title" # Alternative: role
+        date_range: "Jan 2020 - Present" # Alternative: duration
         location: "City, State"
         description: ["Task 1", "Task 2"]
     - education:
@@ -28,6 +28,8 @@ resume:
         institution: "University Name"
         date: "May 2019"
         field_of_study: "Computer Science"
+    # Note: Many fields have alternatives (e.g., 'role' for 'job_title'). 
+    # See docs/yaml_resume.md for the full list.
 """
 
 TEMPLATE_GUIDE = """# Template Context Reference
