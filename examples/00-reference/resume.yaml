@@ -35,6 +35,7 @@ resume:
     - summary: |
         A brief overview of your professional background and key achievements.
         Multi-line strings are supported using the '|' character.
+        Check out my work at https://github.com/username
 
     # 3. Skills: List of competencies
     - skills: ["Python", "JavaScript", "YAML", "Jinja2", "Docker", "AWS"]
@@ -46,8 +47,8 @@ resume:
           duration: "Jan 2020 - Present"
           location: "City, State (or Remote)"
           description:
-            - Key achievement or responsibility
-            - Another bullet point describing your impact
+            - "Key achievement or responsibility with a link: https://example.com"
+            - "Another bullet point describing your impact\nThis line has a manual break."
             - "Used [Tech Stack] to improve [Metric] by [X]%"
         
         - company: "Previous Company"

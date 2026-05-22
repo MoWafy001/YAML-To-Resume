@@ -3,5 +3,14 @@
         <h2>{{ block.title }}</h2>
         <span>{{ block.date }}</span>
     </div>
-    <p>{{ block.description }}</p>
+    {% if block.description is string %}
+    <p>{{ block.description | format_text }}</p>
+    {% else %}
+    <ul>
+        {% for line in block.description %}
+        <li>{{ line | format_text }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
+
 </div>

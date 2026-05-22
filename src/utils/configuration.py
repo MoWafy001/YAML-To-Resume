@@ -10,6 +10,13 @@ def has_no_configurations():
     return not os.path.exists(CONFIG_DIR)
 
 def initialize_reinitialize_configurations(interactive: bool = True):
+    # Ask user if they want to initialize configurations
+    if interactive:
+        yes = wait_for_user_confirmation(f"Configuration directory will be created at {CONFIG_DIR}.\nDo you want to proceed?")
+        if not yes:
+            print("Aborting configuration initialization.")
+            return
+
     # Check if the configuration directory exists
     if os.path.exists(CONFIG_DIR):
         if interactive:
@@ -21,11 +28,6 @@ def initialize_reinitialize_configurations(interactive: bool = True):
         shutil.rmtree(CONFIG_DIR)
 
     # Create the configuration directory
-    if interactive:
-        yes = wait_for_user_confirmation(f"Configuration directory will be created at {CONFIG_DIR}.\nDo you want to proceed?")
-        if not yes:
-            print("Aborting configuration initialization.")
-            return
     os.makedirs(CONFIG_DIR)
     print(f"Configuration directory created at {CONFIG_DIR}")
 

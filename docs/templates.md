@@ -46,14 +46,26 @@
 | `institution` | string | School name | Yes |
 | `field_of_study` | string | Major area | No |
 | `date` | string | Graduation date | No |
-| `description` | string | Optional details | No |
+| `description` | string \| list | Optional details | No |
 
 ### `projects`
 | Attribute | Type | Description | Always Present |
 | :--- | :--- | :--- | :--- |
 | `title` | string | Project name | Yes |
 | `date` | string | Completion date | No |
-| `description` | string | Project details | Yes |
+| `description` | string \| list | Project details | Yes |
+
+## Custom Filters
+
+### `format_text`
+A custom filter is provided to automatically:
+1.  **Linkify URLs**: Converts `https://...` into clickable `<a>` tags.
+2.  **Preserve Line Breaks**: Converts `\n` into `<br>` tags.
+
+**Usage:**
+```html
+<p>{{ block.description | format_text }}</p>
+```
 
 ## Implementation Patterns
 
@@ -67,11 +79,11 @@
 ### Handling String vs List (Description)
 ```html
 {% if block.description is string %}
-  <p>{{ block.description }}</p>
+  <p>{{ block.description | format_text }}</p>
 {% else %}
   <ul>
     {% for point in block.description %}
-      <li>{{ point }}</li>
+      <li>{{ point | format_text }}</li>
     {% endfor %}
   </ul>
 {% endif %}

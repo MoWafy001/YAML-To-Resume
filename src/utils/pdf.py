@@ -1,7 +1,9 @@
 from weasyprint import HTML, CSS
 import os
 import pathlib
+import re
 from jinja2 import Environment, FileSystemLoader
+from markupsafe import Markup
 from utils.configuration import get_configuration
 from utils.yaml_resume import YAMLResume
 
@@ -25,6 +27,28 @@ def __create_pdf(htmlstr, file_path, template_dir):
 
     HTML(string=htmlstr).write_pdf(file_path, stylesheets=css_files)
     print(f"Created successfully: {file_path}")
+
+
+def format_text(text):
+    """
+    Jinja2 filter to:
+    1. Convert URLs to clickable links.
+    2. Convert newlines to <br> tags.
+    """
+    if not isinstance(text, str):
+        return text
+    
+    # Escape existing HTML to prevent XSS, then convert to Markup
+    text = Markup.escape(text)
+    
+    # Linkify URLs
+    url_pattern = re.compile(r'(https?://[^\s]+)')
+    text = url_pattern.sub(r'<a href="\1">\1</a>', text)
+    
+    # Preserve line breaks
+    text = text.replace('\n', '<br>')
+    
+    return Markup(text)
 
 
 def create_resume(file_path, template_arg, output_arg = None, verbose = False):
@@ -62,6 +86,7 @@ def create_resume(file_path, template_arg, output_arg = None, verbose = False):
 
     file_loader = FileSystemLoader(str(template_dir.absolute()))
     env = Environment(loader=file_loader, autoescape=True)
+    env.filters['format_text'] = format_text
     template_obj = env.get_template('layout/layout.html')
     
     render_vars = {

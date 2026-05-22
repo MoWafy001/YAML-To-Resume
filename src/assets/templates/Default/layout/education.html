@@ -14,6 +14,14 @@
         {% endif %}
     </div>
     {% if block.description %}
-    <p>{{ block.description }}</p>
+    {% if block.description is string %}
+    <p>{{ block.description | format_text }}</p>
+    {% else %}
+    <ul>
+        {% for line in block.description %}
+        <li>{{ line | format_text }}</li>
+        {% endfor %}
+    </ul>
+    {% endif %}
     {% endif %}
 </div>
