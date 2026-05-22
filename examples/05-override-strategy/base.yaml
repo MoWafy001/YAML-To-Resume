@@ -1,0 +1,10 @@
+resume:
+  name: "Base Name"
+  job_title: "Base Title"
+  template: "Default"
+  content:
+    - header:
+      - email: "base@example.com"
+      - location: "Base City"
+    - summary: "This summary comes from the base file."
+    - skills: ["Python", "YAML"]

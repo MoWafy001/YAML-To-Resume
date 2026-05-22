@@ -83,6 +83,20 @@ yaml-to-resume config
 
 ---
 
+---
+
+## Configuration File
+
+The `config.yaml` file (created during `init`) allows you to set global defaults.
+
+| Key | Description | Default |
+| :--- | :--- | :--- |
+| `default_template` | The template used if none is specified. | `Default` |
+| `default_inherit_strategy` | Global inheritance strategy (`extend`, `overwrite`). | `extend` |
+| `templates_dir` | Path to the directory where templates are stored. | (System dependent) |
+
+---
+
 ## Path Resolution
 - **Linux:** `~/.config/yaml-to-resume/`
 - **macOS:** `~/Library/Application Support/yaml-to-resume/`

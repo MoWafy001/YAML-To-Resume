@@ -19,7 +19,8 @@ def handle_build_command(cli_arguments):
     create_resume_or_resumes(
         cli_arguments.input_path,
         cli_arguments.template,
-        cli_arguments.output
+        cli_arguments.output,
+        cli_arguments.verbose
     )
 
 

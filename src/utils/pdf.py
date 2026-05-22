@@ -27,13 +27,19 @@ def __create_pdf(htmlstr, file_path, template_dir):
     print(f"Created successfully: {file_path}")
 
 
-def create_resume(file_path, template_arg, output_arg = None):
-    yaml_resume = YAMLResume(file_path)
+def create_resume(file_path, template_arg, output_arg = None, verbose = False):
+    if verbose:
+        print(f"--- Starting build for: {file_path} ---")
+    
+    yaml_resume = YAMLResume(file_path, verbose=verbose)
     
     # Priority: 1. CLI Argument, 2. YAML file, 3. Config default
     template = template_arg if template_arg else yaml_resume.template
     if not template:
         template = get_configuration('default_template')
+    
+    if verbose:
+        print(f"Using template: {template}")
     
     template_p = pathlib.Path(template)
 
@@ -46,6 +52,10 @@ def create_resume(file_path, template_arg, output_arg = None):
     else:
         template_dir = pathlib.Path(get_configuration('templates_dir')) / template
         layout_path = template_dir / 'layout' / 'layout.html'
+
+    if verbose:
+        print(f"Resolved template directory: {template_dir}")
+        print(f"Resolved layout path: {layout_path}")
 
     if not layout_path.exists():
         raise FileNotFoundError(f"Layout file not found at {layout_path}")
@@ -64,6 +74,9 @@ def create_resume(file_path, template_arg, output_arg = None):
         for k, v in resume_data.items():
             if k not in render_vars and k != 'content':
                 render_vars[k] = v
+
+    if verbose:
+        print(f"Rendering with variables: {list(render_vars.keys())}")
 
     html = template_obj.render(**render_vars)
 
@@ -84,12 +97,17 @@ def create_resume(file_path, template_arg, output_arg = None):
         if not final_output_path.lower().endswith('.pdf'):
             final_output_path += '.pdf'
 
+    if verbose:
+        print(f"Final output path: {final_output_path}")
+
     __create_pdf(html, final_output_path, str(template_dir.absolute()))
 
-def create_resume_or_resumes(file_or_dir_path, template, output_name = None):
+def create_resume_or_resumes(file_or_dir_path, template, output_name = None, verbose = False):
     if os.path.isdir(file_or_dir_path):
         yaml_files = [os.path.join(file_or_dir_path, f) for f in os.listdir(file_or_dir_path) if f.endswith('.yaml') or f.endswith('.yml')]
+        if verbose:
+            print(f"Found {len(yaml_files)} YAML files in directory: {file_or_dir_path}")
         for f in yaml_files:
-            create_resume(f, template, output_name)
+            create_resume(f, template, output_name, verbose)
     else:
-        create_resume(file_or_dir_path, template, output_name)
+        create_resume(file_or_dir_path, template, output_name, verbose)

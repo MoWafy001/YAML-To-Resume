@@ -4,6 +4,13 @@
 
 Generate professional PDF resumes from simple YAML files using Jinja2 templates.
 
+## Key Features
+
+- **Advanced Inheritance**: Compose resumes from multiple YAML files.
+- **Deep Merging**: Intelligently merge nested data and content blocks.
+- **Multiple Strategies**: Choose between `extend` or `overwrite` inheritance.
+- **Custom Templates**: Easily create and use your own Jinja2 templates.
+
 ## Quick Start
 
 ### 1. Install

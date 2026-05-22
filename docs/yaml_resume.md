@@ -15,7 +15,27 @@ The resume file is written in YAML. The root object MUST be `resume`.
 | `output` | string | Name of the output PDF file | No |
 | `primary_color` | string | Hex color without # (e.g., "008080") | No |
 | `inherit` | string \| list | Filename(s) to inherit data from | No |
+| `inherit_strategy` | string | Strategy for merging inherited data (`deep`, `shallow`, `override`) | No |
 | `content` | list | List of content blocks | Yes |
+
+---
+
+## Inheritance Strategies
+
+When using the `inherit` field, you can specify how the data should be merged using `inherit_strategy`.
+
+| Strategy | Description |
+| :--- | :--- |
+| `extend` (Default) | Deep recursive merge. Merges dictionaries, appends items to lists, and overrides scalars (strings, etc.). For the `content` block, it matches by type and merges block contents. |
+| `overwrite` | Deep recursive merge for dictionaries, but replacement for lists and scalars. For the `content` block, it matches by type and replaces the entire block value. |
+
+### Keyed List Merging (Content Block)
+Both strategies use "Keyed List Merging" for the `content` field. This matches blocks by their type (e.g., `header`, `summary`, `experience`).
+
+- **In `extend` mode**: If a block type matches, its contents are merged recursively. For example, if both files have a `skills` block, the lists of skills will be combined.
+- **In `overwrite` mode**: If a block type matches, the new block completely replaces the old one. For example, if both files have a `header` block, only the information from the latest file will be kept.
+
+In both modes, any block types present in only one file are preserved in the final output.
 
 ---
 

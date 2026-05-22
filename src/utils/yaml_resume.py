@@ -1,190 +1,238 @@
 import yaml
 import os
 import copy
+from typing import Any, Dict, List, Optional
 
-from blocks import Block, EducationBlock, ExperienceBlock, HeaderBlock, ProjectsBlock, SkillsBlock, SummaryBlock
-from consts import DEFAULT_TEMPLATE
+from blocks import (
+    Block, EducationBlock, ExperienceBlock, HeaderBlock, 
+    ProjectsBlock, SkillsBlock, SummaryBlock
+)
+from consts import DEFAULT_TEMPLATE, DEFAULT_INHERIT_STRATEGY, INHERIT_STRATEGIES
+from utils.configuration import get_configuration
 
 class YAMLResume:
-    def __init__(self, file_path='vars.yaml'):
-        if file_path.startswith('/'):
-            self.current_dir = '/'.join(file_path.split('/')[:-1])
-        else:
-            self.current_dir = os.getcwd() + '/' + \
-                '/'.join(file_path.split('/')[:-1])
+    """
+    Handles loading, inheriting, and merging resume data from YAML files.
+    Converts raw YAML data into structured Block objects for rendering.
+    """
 
-        self.__resume_vars = {}
-        self.__open_yaml(file_path)
+    BLOCK_MAP = {
+        'header': HeaderBlock,
+        'summary': SummaryBlock,
+        'skills': SkillsBlock,
+        'education': EducationBlock,
+        'experience': ExperienceBlock,
+        'projects': ProjectsBlock
+    }
 
-        if not self.__resume_vars:
-            raise Exception('Missing the `resume` key')
-
-        # Use snake_case keys consistently
-        self.name = self.__resume_vars.get('name')
-        self.job_title = self.__resume_vars.get('job_title')
-        self.output = self.__resume_vars.get('output')
-        self.content = self.__cast_to_blocks(self.__resume_vars.get('content'))
-        self.template = self.__resume_vars.get('template') if 'template' in self.__resume_vars else DEFAULT_TEMPLATE
-
-    def __open_yaml(self, vars_path, vars_path_dir=None):
-        if vars_path.startswith("$"):
-            vars_path = vars_path.replace(
-                '$', self.current_dir if vars_path_dir is None else vars_path_dir, 1)
+    def __init__(self, file_path: str = 'vars.yaml', verbose: bool = False):
+        # Initialize directory context for relative path resolution
+        self.current_dir = os.path.dirname(os.path.abspath(file_path))
+        self.verbose = verbose
         
-        if not os.path.isabs(vars_path):
-            if vars_path_dir:
-                vars_path = os.path.join(vars_path_dir, vars_path)
-            else:
-                vars_path = os.path.join(os.getcwd(), vars_path)
+        # Load global defaults from configuration
+        self._default_template = get_configuration('default_template', DEFAULT_TEMPLATE)
+        self._default_strategy = get_configuration('default_inherit_strategy', DEFAULT_INHERIT_STRATEGY)
 
-        if not os.path.exists(vars_path):
-             return
+        # State for merging
+        self._resume_vars: Dict[str, Any] = {}
+        self._inherit_strategy = self._default_strategy
+        
+        # Load and process YAML files (handles inheritance)
+        self._load_yaml_recursive(file_path)
 
-        with open(vars_path) as f:
-            loaded_data = yaml.safe_load(f)
-            if not loaded_data or 'resume' not in loaded_data:
+        if not self._resume_vars:
+            raise ValueError(f"No 'resume' key found in {file_path}")
+
+        # Map merged variables to instance attributes
+        self.name = self._resume_vars.get('name')
+        self.job_title = self._resume_vars.get('job_title')
+        self.output = self._resume_vars.get('output')
+        self.template = self._resume_vars.get('template', self._default_template)
+        
+        if self.verbose:
+            print(f"Final merged variables: {list(self._resume_vars.keys())}")
+
+        # Cast raw content to block objects
+        self.content = self._parse_content_blocks(self._resume_vars.get('content', []))
+
+    def _resolve_path(self, path: str, base_dir: Optional[str] = None) -> str:
+        """Resolves absolute paths, handling the '$' shortcut for current_dir."""
+        if path.startswith("$"):
+            return path.replace('$', base_dir or self.current_dir, 1)
+        
+        if os.path.isabs(path):
+            return path
+            
+        return os.path.join(base_dir or os.getcwd(), path)
+
+    def _load_yaml_recursive(self, vars_path: str, base_dir: Optional[str] = None):
+        """Recursively loads YAML files following the 'inherit' chain."""
+        full_path = self._resolve_path(vars_path, base_dir)
+        
+        if self.verbose:
+            print(f"Loading YAML: {full_path}")
+
+        if not os.path.exists(full_path):
+            if self.verbose:
+                print(f"Warning: File not found: {full_path}")
+            return
+
+        with open(full_path, 'r') as f:
+            data = yaml.safe_load(f)
+            if not data or 'resume' not in data:
+                if self.verbose:
+                    print(f"Warning: No 'resume' key in {full_path}")
                 return
 
-            resume_data = loaded_data['resume']
+            resume_data = data['resume']
+            file_dir = os.path.dirname(os.path.abspath(full_path))
 
-            if 'inherit' in resume_data:
-                inherit = resume_data['inherit']
-                current_file_dir = os.path.dirname(os.path.abspath(vars_path))
+            # Determine strategy for THIS file (local override > current state > default)
+            strategy = resume_data.get('inherit_strategy', self._inherit_strategy)
+            if strategy not in INHERIT_STRATEGIES:
+                raise ValueError(f"Invalid strategy '{strategy}'. Use: {INHERIT_STRATEGIES}")
+
+            # 1. Process inheritance first (bottom-up)
+            inherit = resume_data.get('inherit')
+            if inherit:
+                parents = [inherit] if isinstance(inherit, str) else inherit
+                if self.verbose:
+                    print(f"Inheriting from: {parents}")
+                for parent in parents:
+                    self._load_yaml_recursive(parent, file_dir)
+
+            # 2. Apply current file's variables using its resolved strategy
+            if self.verbose:
+                print(f"Merging {full_path} using strategy: {strategy}")
+            self._merge_vars(resume_data, strategy)
+
+    def _merge_vars(self, new_data: Dict[str, Any], strategy: str):
+        """Applies the specified strategy to merge new_data into state."""
+        skip = {'inherit', 'inherit_strategy'}
+        
+        for key, value in new_data.items():
+            if key in skip:
+                continue
                 
-                if isinstance(inherit, list):
-                    for i in inherit:
-                        self.__open_yaml(i, current_file_dir)
-                elif isinstance(inherit, str):
-                    self.__open_yaml(inherit, current_file_dir)
+            if key not in self._resume_vars:
+                self._resume_vars[key] = copy.deepcopy(value)
+                continue
 
-            self.__apply_resume_vars(resume_data)
-
-    @staticmethod
-    def __is_keyed_list(lst):
-        """Check if a list is a 'keyed list' — every item is a dict with exactly one key."""
-        return (
-            len(lst) > 0
-            and all(isinstance(item, dict) and len(item) == 1 for item in lst)
-        )
+            if strategy == 'extend':
+                self._resume_vars[key] = self._extend_merge(self._resume_vars[key], value, key == 'content')
+            else: # overwrite
+                self._resume_vars[key] = self._overwrite_merge(self._resume_vars[key], value, key == 'content')
 
     @staticmethod
-    def __deep_merge(base, override):
-        """
-        Recursively deep-merge override into base.
-        - For dicts: keys from override take precedence; shared keys are merged recursively.
-        - For keyed lists (lists of single-key dicts): items are matched and merged by
-          their dict key. New keys from override are appended. Base-only keys are kept.
-        - For other lists: override replaces base entirely.
-        - For all other types: override wins.
-        """
+    def _extend_merge(base: Any, override: Any, is_content: bool = False) -> Any:
+        """Deep merge: merges dicts, extends lists, overrides scalars."""
+        if is_content and isinstance(base, list) and isinstance(override, list):
+            if YAMLResume._is_keyed_list(base) and YAMLResume._is_keyed_list(override):
+                return YAMLResume._merge_keyed_lists(base, override, strategy='extend')
+
         if isinstance(base, dict) and isinstance(override, dict):
             merged = copy.deepcopy(base)
-            for key, value in override.items():
-                if key in merged:
-                    merged[key] = YAMLResume.__deep_merge(merged[key], value)
-                else:
-                    merged[key] = copy.deepcopy(value)
+            for k, v in override.items():
+                merged[k] = YAMLResume._extend_merge(merged.get(k), v) if k in merged else copy.deepcopy(v)
             return merged
 
         if isinstance(base, list) and isinstance(override, list):
-            # Keyed-list merge: match items by their single dict key
-            if YAMLResume.__is_keyed_list(base) and YAMLResume.__is_keyed_list(override):
-                # Build an ordered dict from base items
-                merged_keys = {}
-                merged_order = []
-                for item in base:
-                    key = next(iter(item))
-                    merged_keys[key] = copy.deepcopy(item[key])
-                    merged_order.append(key)
+            return copy.deepcopy(base) + copy.deepcopy(override)
 
-                for item in override:
-                    key = next(iter(item))
-                    if key in merged_keys:
-                        # Deep-merge the value for this key
-                        merged_keys[key] = YAMLResume.__deep_merge(
-                            merged_keys[key], item[key]
-                        )
-                    else:
-                        merged_keys[key] = copy.deepcopy(item[key])
-                        merged_order.append(key)
-
-                return [{k: merged_keys[k]} for k in merged_order]
-
-            # For regular lists, override replaces base
-            return copy.deepcopy(override)
-
-        # For scalars (str, int, etc.) or mismatched types, override wins
         return copy.deepcopy(override)
 
-    def __apply_resume_vars(self, resume_data):
-        for key, value in resume_data.items():
-            if key == 'inherit':
-                continue
-            if key in self.__resume_vars:
-                self.__resume_vars[key] = YAMLResume.__deep_merge(
-                    self.__resume_vars[key], value
-                )
+    @staticmethod
+    def _overwrite_merge(base: Any, override: Any, is_content: bool = False) -> Any:
+        """Deep merge for dicts, but replacement for lists and scalars."""
+        if is_content and isinstance(base, list) and isinstance(override, list):
+            if YAMLResume._is_keyed_list(base) and YAMLResume._is_keyed_list(override):
+                return YAMLResume._merge_keyed_lists(base, override, strategy='overwrite')
+
+        if isinstance(base, dict) and isinstance(override, dict):
+            merged = copy.deepcopy(base)
+            for k, v in override.items():
+                merged[k] = YAMLResume._overwrite_merge(merged.get(k), v) if k in merged else copy.deepcopy(v)
+            return merged
+
+        return copy.deepcopy(override)
+
+    @staticmethod
+    def _merge_keyed_lists(base: List[Dict], override: List[Dict], strategy: str) -> List[Dict]:
+        """Merges two lists of single-key dicts by matching their keys."""
+        merged_map = {next(iter(item)): copy.deepcopy(item[next(iter(item))]) for item in base}
+        order = [next(iter(item)) for item in base]
+
+        for item in override:
+            key = next(iter(item))
+            if key in merged_map:
+                if strategy == 'extend':
+                    merged_map[key] = YAMLResume._extend_merge(merged_map[key], item[key])
+                else: # overwrite
+                    merged_map[key] = copy.deepcopy(item[key])
             else:
-                self.__resume_vars[key] = copy.deepcopy(value)
+                merged_map[key] = copy.deepcopy(item[key])
+                order.append(key)
 
-    def __cast_to_blocks(self, content):
-        if not content:
-            return []
+        return [{k: merged_map[k]} for k in order]
 
-        if type(content) is not list:
-            raise TypeError('Content must be a list')
+    @staticmethod
+    def _is_keyed_list(lst: List[Any]) -> bool:
+        """Returns True if every item in the list is a dict with exactly one key."""
+        return bool(lst) and all(isinstance(i, dict) and len(i) == 1 for i in lst)
 
-        blocks: list[Block] = []
+    def _parse_content_blocks(self, content: List[Dict[str, Any]]) -> List[Block]:
+        """Converts raw content dictionaries into Block objects."""
+        if not isinstance(content, list):
+            raise TypeError("Resume 'content' must be a list of blocks.")
+
+        blocks = []
         for item in content:
-            if not isinstance(item, dict):
-                raise TypeError('Each item in content must be a dict')
+            if not isinstance(item, dict) or len(item) != 1:
+                raise ValueError("Each content item must be a dict with exactly one key (the block type).")
+
+            type_name, data = next(iter(item.items()))
+            block_cls = self.BLOCK_MAP.get(type_name)
             
-            d_keys = list(item.keys())
-            if len(d_keys) != 1:
-                raise ValueError('Each item in content must have exactly one key')
+            if not block_cls:
+                raise ValueError(f"Unknown block type: {type_name}")
 
-            block_name = d_keys[0]
-            block_data = item[block_name]
-            blockname_to_class = {
-                'header': HeaderBlock,
-                'summary': SummaryBlock,
-                'skills': SkillsBlock,
-                'education': EducationBlock,
-                'experience': ExperienceBlock,
-                'projects': ProjectsBlock
-            }
-
-            block_class = blockname_to_class.get(block_name)
-            if not block_class:
-                raise ValueError(f'Unknown block type: {block_name}')
-
-            if block_name in ['education', 'experience', 'projects'] and isinstance(block_data, list):
-                for sub_item in block_data:
-                    if isinstance(sub_item, dict):
-                        blocks.append(block_class(**sub_item))
-            elif block_name == 'header' and isinstance(block_data, list):
-                header_data = {}
-                extras = []
-                for sub_item in block_data:
-                    if isinstance(sub_item, dict):
-                        header_data.update(sub_item)
-                    else:
-                        extras.append(sub_item)
-                
-                merged_header = {'name': self.name, 'job_title': self.job_title, 'extras': extras}
-                merged_header.update(header_data)
-                blocks.append(block_class(**merged_header))
-            elif isinstance(block_data, dict):
-                blocks.append(block_class(**block_data))
+            # Special handling for complex blocks
+            if type_name == 'header':
+                blocks.append(self._create_header_block(data))
+            elif type_name in ['education', 'experience', 'projects'] and isinstance(data, list):
+                for entry in data:
+                    if isinstance(entry, dict):
+                        blocks.append(block_cls(**entry))
+            elif isinstance(data, dict):
+                blocks.append(block_cls(**data))
             else:
-                blocks.append(block_class(block_data))
+                blocks.append(block_cls(data))
+
+        if self.verbose:
+            print(f"Parsed {len(blocks)} content blocks.")
 
         return blocks
 
-    def get(self, var_name):
-        if var_name == 'resume':
-            return self.__resume_vars
-        if var_name not in self.__resume_vars:
-            raise Exception(f'({var_name}) not found')
-        else:
-            return self.__resume_vars[var_name]
+    def _create_header_block(self, data: Any) -> HeaderBlock:
+        """Specialized logic for merging header data with name/job_title."""
+        header_vars = {'name': self.name, 'job_title': self.job_title, 'extras': []}
+        
+        if isinstance(data, list):
+            for item in data:
+                if isinstance(item, dict):
+                    header_vars.update(item)
+                else:
+                    header_vars['extras'].append(item)
+        elif isinstance(data, dict):
+            header_vars.update(data)
+            
+        return HeaderBlock(**header_vars)
+
+    def get(self, key: str) -> Any:
+        """Public accessor for merged resume variables."""
+        if key == 'resume':
+            return self._resume_vars
+        if key not in self._resume_vars:
+            raise KeyError(f"Variable '{key}' not found in resume data.")
+        return self._resume_vars[key]

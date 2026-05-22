@@ -52,3 +52,6 @@ Session.vim
 .LSOverride
 
 *.pdf
+
+# testing things
+test-files/

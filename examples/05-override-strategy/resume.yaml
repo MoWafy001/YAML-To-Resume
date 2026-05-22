@@ -1,0 +1,10 @@
+resume:
+  inherit: "base.yaml"
+  inherit_strategy: overwrite
+  name: "Override User"
+  job_title: "Senior Engineer"
+  content:
+    - header:
+      - email: "override@example.com"
+    - summary: "This summary completely replaces the base."
+    - skills: ["Override", "Strategy"]

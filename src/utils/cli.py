@@ -129,6 +129,13 @@ def parse_cli_arguments():
         "-o", "--output", 
         help="The destination path. Can be a filename (ending in .pdf) or a directory path."
     )
+    
+    # Build: Verbosity
+    build_parser.add_argument(
+        "-v", "--verbose",
+        action="store_true",
+        help="Enable verbose logging for debugging."
+    )
 
     # If no command is provided, default to 'build'
     if len(sys.argv) > 1 and sys.argv[1] not in ['init', 'build', 'new', 'config', '-h', '--help']:

@@ -1,0 +1,10 @@
+resume:
+  inherit: "base.yaml"
+  inherit_strategy: extend
+  name: "Shallow User"
+  job_title: "DevOps Engineer"
+  content:
+    - header:
+      - email: "shallow@example.com"
+    - summary: "Shallow merge replaces top-level keys entirely."
+    - skills: ["Shallow", "Merge"]
