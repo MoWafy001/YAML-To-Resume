@@ -29,3 +29,5 @@ dependencies = [
 
 [project.scripts]
 yaml-to-resume = "main:run"
+# alias
+ytr = "main:run"
