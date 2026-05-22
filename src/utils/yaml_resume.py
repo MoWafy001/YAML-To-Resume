@@ -1,5 +1,6 @@
 import yaml
 import os
+import copy
 
 from blocks import Block, EducationBlock, ExperienceBlock, HeaderBlock, ProjectsBlock, SkillsBlock, SummaryBlock
 from consts import DEFAULT_TEMPLATE
@@ -58,21 +59,73 @@ class YAMLResume:
 
             self.__apply_resume_vars(resume_data)
 
+    @staticmethod
+    def __is_keyed_list(lst):
+        """Check if a list is a 'keyed list' — every item is a dict with exactly one key."""
+        return (
+            len(lst) > 0
+            and all(isinstance(item, dict) and len(item) == 1 for item in lst)
+        )
+
+    @staticmethod
+    def __deep_merge(base, override):
+        """
+        Recursively deep-merge override into base.
+        - For dicts: keys from override take precedence; shared keys are merged recursively.
+        - For keyed lists (lists of single-key dicts): items are matched and merged by
+          their dict key. New keys from override are appended. Base-only keys are kept.
+        - For other lists: override replaces base entirely.
+        - For all other types: override wins.
+        """
+        if isinstance(base, dict) and isinstance(override, dict):
+            merged = copy.deepcopy(base)
+            for key, value in override.items():
+                if key in merged:
+                    merged[key] = YAMLResume.__deep_merge(merged[key], value)
+                else:
+                    merged[key] = copy.deepcopy(value)
+            return merged
+
+        if isinstance(base, list) and isinstance(override, list):
+            # Keyed-list merge: match items by their single dict key
+            if YAMLResume.__is_keyed_list(base) and YAMLResume.__is_keyed_list(override):
+                # Build an ordered dict from base items
+                merged_keys = {}
+                merged_order = []
+                for item in base:
+                    key = next(iter(item))
+                    merged_keys[key] = copy.deepcopy(item[key])
+                    merged_order.append(key)
+
+                for item in override:
+                    key = next(iter(item))
+                    if key in merged_keys:
+                        # Deep-merge the value for this key
+                        merged_keys[key] = YAMLResume.__deep_merge(
+                            merged_keys[key], item[key]
+                        )
+                    else:
+                        merged_keys[key] = copy.deepcopy(item[key])
+                        merged_order.append(key)
+
+                return [{k: merged_keys[k]} for k in merged_order]
+
+            # For regular lists, override replaces base
+            return copy.deepcopy(override)
+
+        # For scalars (str, int, etc.) or mismatched types, override wins
+        return copy.deepcopy(override)
+
     def __apply_resume_vars(self, resume_data):
         for key, value in resume_data.items():
-            if key != 'inherit':
-                # deep nested application
-                if isinstance(value, dict):
-                    if key not in self.__resume_vars:
-                        self.__resume_vars[key] = {}
-                    self.__resume_vars[key].update(value)
-                elif isinstance(value, list):
-                    if key not in self.__resume_vars:
-                        self.__resume_vars[key] = []
-                    self.__resume_vars[key].extend(value)
-                else:
-                    self.__resume_vars[key] = value
-                
+            if key == 'inherit':
+                continue
+            if key in self.__resume_vars:
+                self.__resume_vars[key] = YAMLResume.__deep_merge(
+                    self.__resume_vars[key], value
+                )
+            else:
+                self.__resume_vars[key] = copy.deepcopy(value)
 
     def __cast_to_blocks(self, content):
         if not content:
