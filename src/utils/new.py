@@ -99,11 +99,11 @@ TEMPLATE_GUIDE = """# Template Context Reference
 ### Handling String vs List (Description)
 ```html
 {% if block.description is string %}
-  <p>{{ block.description }}</p>
+  <p>{{ block.description | format_text }}</p>
 {% else %}
   <ul>
     {% for point in block.description %}
-      <li>{{ point }}</li>
+      <li>{{ point | format_text }}</li>
     {% endfor %}
   </ul>
 {% endif %}
@@ -137,7 +137,7 @@ def create_new_template(name, output_dir=None):
     os.makedirs(os.path.join(path, 'css'), exist_ok=True)
     
     with open(os.path.join(path, 'css', 'style.css'), 'w') as f:
-        f.write("body { font-family: sans-serif; }")
+        f.write("body { font-family: sans-serif; }\na { color: var(--primary-color, #008080); text-decoration: none; }\na:hover { opacity: 0.8; }")
 
     with open(os.path.join(path, 'README.md'), 'w') as f:
         f.write(TEMPLATE_GUIDE)
@@ -188,9 +188,16 @@ def create_new_template(name, output_dir=None):
     files = {
         'layout/layout.html': layout_content,
         'layout/header.html': header_content,
-        'layout/summary.html': "<div>{{ block.summary }}</div>",
+        'layout/summary.html': "<div>{{ block.summary | format_text }}</div>",
         'layout/skills.html': "<ul>{% for s in block.skills %}<li>{{ s }}</li>{% endfor %}</ul>",
-        'layout/experience.html': "<div>{{ block.job_title }} at {{ block.company }}</div>",
+        'layout/experience.html': """<div>
+    <h2>{{ block.job_title }} at {{ block.company }}</h2>
+    {% if block.description is string %}
+        <p>{{ block.description | format_text }}</p>
+    {% else %}
+        <ul>{% for line in block.description %}<li>{{ line | format_text }}</li>{% endfor %}</ul>
+    {% endif %}
+</div>""",
         'layout/education.html': "",
         'layout/projects.html': ""
     }

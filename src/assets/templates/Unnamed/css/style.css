@@ -18,9 +18,23 @@ body {
   background-color: var(--main-bg);
 }
 
+a {
+  color: var(--primary-color, #2C3E50);
+  text-decoration: none;
+}
+
+.col:first-child a {
+  color: var(--sidebar-text);
+}
+
+a:hover {
+  opacity: 0.8;
+}
+
 .content {
   display: flex;
-  min-height: 29.7cm; /* A4 height */
+  min-height: 29.7cm;
+  /* A4 height */
 }
 
 .col:first-child {
@@ -53,7 +67,7 @@ header {
 .job-title {
   font-size: 1.1rem;
   font-weight: normal;
-  color: var(--primary-color-light, rgba(255,255,255,0.7));
+  color: var(--primary-color-light, rgba(255, 255, 255, 0.7));
   margin: 0 0 1.5rem 0;
 }
 
@@ -71,7 +85,7 @@ header {
 }
 
 .link.clickable:hover {
-  text-decoration: underline;
+  opacity: 0.8;
 }
 
 /* Sections */
@@ -89,7 +103,7 @@ header {
 /* Specific Sidebar Section Titles */
 .col:first-child .section-title {
   color: #fff;
-  border-bottom-color: rgba(255,255,255,0.3);
+  border-bottom-color: rgba(255, 255, 255, 0.3);
   font-size: 1rem;
 }
 
@@ -115,7 +129,7 @@ header {
 
 .skills li {
   font-size: 0.85rem;
-  background-color: rgba(255,255,255,0.1);
+  background-color: rgba(255, 255, 255, 0.1);
   padding: 0.2rem 0.5rem;
   border-radius: 3px;
 }
