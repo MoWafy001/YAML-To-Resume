@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+    {% for block in blocks if block.block_type == 'header' %}
+        {% include 'layout/header.html' %}
+    {% endfor %}
+
+    <main class="latex-content">
+        {% for block in blocks if block.block_type == 'summary' %}
+            {% if loop.first %}
+            <section class="latex-section">
+                <h2 class="latex-section-title">Summary</h2>
+            {% endif %}
+            {% include 'layout/summary.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
+
+        {% for block in blocks if block.block_type == 'skills' %}
+            {% if loop.first %}
+            <section class="latex-section">
+                <h2 class="latex-section-title">Technical Skills</h2>
+            {% endif %}
+            {% include 'layout/skills.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
+
+        {% for block in blocks if block.block_type == 'experience' %}
+            {% if loop.first %}
+            <section class="latex-section">
+                <h2 class="latex-section-title">Experience</h2>
+            {% endif %}
+            {% include 'layout/experience.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
+
+        {% for block in blocks if block.block_type == 'education' %}
+            {% if loop.first %}
+            <section class="latex-section latex-section-education">
+                <h2 class="latex-section-title">Education</h2>
+            {% endif %}
+            {% include 'layout/education.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
+
+        {% for block in blocks if block.block_type == 'projects' %}
+            {% if loop.first %}
+            <section class="latex-section latex-section-projects">
+                <h2 class="latex-section-title">Projects</h2>
+            {% endif %}
+            {% include 'layout/projects.html' %}
+            {% if loop.last %}</section>{% endif %}
+        {% endfor %}
+    </main>
+</body>
+</html>

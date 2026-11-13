@@ -1,0 +1,31 @@
+{% macro render_header_item(key, value) %}
+    {% set val_str = value | string %}
+    {% if val_str and ('@' in val_str or key == 'email') %}
+        <a href="mailto:{{ value }}">{{ value }}</a>
+    {% elif val_str and (val_str.startswith('+') or key == 'phone' or key == 'tel') %}
+        <a href="tel:{{ value }}">{{ value }}</a>
+    {% elif val_str and (val_str.startswith('http') or val_str.startswith('www') or '.com' in val_str or '.org' in val_str or '.net' in val_str or '.io' in val_str) %}
+        {% set clean_link = value | replace('https://', '') | replace('http://', '') | replace('www.', '') %}
+        {% if clean_link.endswith('/') %}{% set clean_link = clean_link[:-1] %}{% endif %}
+        <a href="{{ value if val_str.startswith('http') else 'https://' ~ value }}">{{ key if (key and key not in ['link', 'url', 'portfolio', 'github', 'linkedin', 'website', 'other']) else clean_link }}</a>
+    {% else %}
+        <span>{{ value }}</span>
+    {% endif %}
+{% endmacro %}
+
+<header class="latex-header">
+    <h1 class="latex-name">{{ name }}</h1>
+    {% if job_title %}
+    <div class="latex-title">{{ job_title }}</div>
+    {% endif %}
+    <div class="latex-contacts">
+        {% for block in blocks if block.block_type == 'header' %}
+            {% for key, value in block.other_info.items() %}
+                <span class="latex-contact-item">{{ render_header_item(key, value) }}</span>
+            {% endfor %}
+            {% for extra in block.extras %}
+                <span class="latex-contact-item">{{ render_header_item('', extra) }}</span>
+            {% endfor %}
+        {% endfor %}
+    </div>
+</header>

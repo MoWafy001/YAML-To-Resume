@@ -1,0 +1,14 @@
+<div class="latex-skills">
+    <ul class="latex-skills-list">
+        {% for skill in block.skills %}
+        <li>
+            {% if ':' in skill %}
+                {% set parts = skill.split(':', 1) %}
+                <strong>{{ parts[0] }}:</strong>{{ parts[1] }}
+            {% else %}
+                {{ skill }}
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>

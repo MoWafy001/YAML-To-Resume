@@ -1,0 +1,185 @@
+@import url('https://fonts.cdnfonts.com/css/computer-modern');
+
+@page {
+    size: A4;
+    margin: 1.25cm 1.4cm;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Computer Modern Serif', 'Latin Modern Roman', 'CMU Serif', 'DejaVu Serif', 'Liberation Serif', serif;
+    font-size: 9.5pt;
+    line-height: 1.35;
+    color: #000000;
+    background-color: #ffffff;
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    color: #000000;
+    text-decoration: underline;
+    text-decoration-thickness: 0.5pt;
+    text-underline-offset: 1.5pt;
+}
+
+a:hover {
+    color: #000000;
+}
+
+.latex-header {
+    text-align: center;
+    margin-bottom: 8pt;
+    padding-bottom: 0;
+}
+
+.latex-name {
+    font-size: 20pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1.2pt;
+    margin: 0 0 2pt 0;
+    color: #000000;
+}
+
+.latex-title {
+    font-size: 10.5pt;
+    font-style: italic;
+    margin: 0 0 3pt 0;
+    color: #000000;
+}
+
+.latex-contacts {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 9pt;
+    color: #000000;
+    margin-top: 3pt;
+}
+
+.latex-contact-item {
+    display: inline-flex;
+    align-items: center;
+}
+
+.latex-contact-item:not(:last-child)::after {
+    content: "|";
+    margin: 0 5pt;
+    color: #000000;
+    font-weight: normal;
+}
+
+.latex-contact-item a {
+    color: #000000;
+    text-decoration: none;
+}
+
+.latex-section {
+    margin-top: 8pt;
+    margin-bottom: 4pt;
+    page-break-inside: auto;
+}
+
+.latex-section-title {
+    font-size: 10.5pt;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 0.8pt;
+    border-bottom: 0.75pt solid #000000;
+    padding-bottom: 1.5pt;
+    margin: 8pt 0 4pt 0;
+    color: #000000;
+    page-break-after: avoid;
+    break-after: avoid;
+}
+
+.latex-section-education {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.latex-section-projects {
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.latex-entry {
+    margin-bottom: 5pt;
+    page-break-inside: avoid;
+    break-inside: avoid;
+}
+
+.latex-entry-header {
+    margin-bottom: 2pt;
+}
+
+.latex-entry-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    line-height: 1.25;
+}
+
+.latex-bold {
+    font-weight: bold;
+    font-size: 9.5pt;
+    color: #000000;
+}
+
+.latex-italic {
+    font-style: italic;
+    font-size: 9pt;
+    color: #000000;
+}
+
+.latex-date {
+    font-style: italic;
+    font-size: 9pt;
+    color: #000000;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.latex-entry-desc {
+    margin: 2pt 0 0 0;
+    font-size: 9pt;
+    line-height: 1.35;
+    text-align: justify;
+}
+
+.latex-bullets {
+    margin: 2pt 0 0 0;
+    padding-left: 14pt;
+    list-style-type: disc;
+}
+
+.latex-bullets li {
+    font-size: 9pt;
+    line-height: 1.32;
+    margin-bottom: 1.5pt;
+    text-align: justify;
+}
+
+.latex-skills-list {
+    margin: 2pt 0 0 0;
+    padding-left: 14pt;
+    list-style-type: disc;
+}
+
+.latex-skills-list li {
+    font-size: 9pt;
+    line-height: 1.35;
+    margin-bottom: 2pt;
+}
+
+.latex-summary p {
+    margin: 2pt 0 0 0;
+    font-size: 9pt;
+    line-height: 1.35;
+    text-align: justify;
+}

@@ -1,0 +1,27 @@
+<div class="latex-entry">
+    <div class="latex-entry-header">
+        <div class="latex-entry-row">
+            <span class="latex-bold">{{ block.company }}</span>
+            {% if block.location %}
+            <span class="latex-italic">{{ block.location }}</span>
+            {% endif %}
+        </div>
+        <div class="latex-entry-row">
+            <span class="latex-italic">{{ block.job_title }}</span>
+            {% if block.date_range %}
+            <span class="latex-date">{{ block.date_range }}</span>
+            {% endif %}
+        </div>
+    </div>
+    {% if block.description %}
+        {% if block.description is string %}
+            <p class="latex-entry-desc">{{ block.description | format_text }}</p>
+        {% else %}
+            <ul class="latex-bullets">
+                {% for line in block.description %}
+                <li>{{ line | format_text }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>
