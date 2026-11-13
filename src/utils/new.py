@@ -135,27 +135,58 @@ def create_new_template(name, output_dir=None):
     path = os.path.join(base_dir, name)
     if os.path.exists(path): return print(f"Template {name} exists.")
     
+    # Use LaTeX as the default starter template
+    latex_dir = os.path.join(base_dir, 'LaTeX')
+    if not os.path.exists(latex_dir):
+        assets_dir = os.path.join(os.path.dirname(__file__), "../assets/templates/LaTeX")
+        if os.path.exists(assets_dir):
+            latex_dir = assets_dir
+
+    if os.path.exists(latex_dir):
+        shutil.copytree(latex_dir, path)
+        print(f"Created template {name} (based on LaTeX)")
+        return
+
     os.makedirs(os.path.join(path, 'layout'), exist_ok=True)
     os.makedirs(os.path.join(path, 'css'), exist_ok=True)
     
     with open(os.path.join(path, 'css', 'style.css'), 'w') as f:
-        f.write("body { font-family: sans-serif; }\na { color: var(--primary-color, #008080); text-decoration: none; }\na:hover { opacity: 0.8; }")
+        f.write("@import url('https://fonts.cdnfonts.com/css/computer-modern');\n\n@page { size: A4; margin: 1.25cm 1.4cm; }\nbody { font-family: 'Computer Modern Serif', 'Latin Modern Roman', 'CMU Serif', 'DejaVu Serif', serif; font-size: 9.5pt; color: #000; }")
 
     with open(os.path.join(path, 'README.md'), 'w') as f:
         f.write(TEMPLATE_GUIDE)
 
-    layout_content = """<html>
+    layout_content = """<!DOCTYPE html>
+<html>
   <body>
     {% for block in blocks if block.block_type == 'header' %}{% include 'layout/header.html' %}{% endfor %}
-    <div class="content">
-      {% for block in blocks if block.block_type == 'summary' %}{% include 'layout/summary.html' %}{% endfor %}
-      {% for block in blocks if block.block_type == 'skills' %}{% include 'layout/skills.html' %}{% endfor %}
+    <main class="latex-content">
+      {% for block in blocks if block.block_type == 'summary' %}
+          {% if loop.first %}<section class="latex-section"><h2 class="latex-section-title">Summary</h2>{% endif %}
+          {% include 'layout/summary.html' %}
+          {% if loop.last %}</section>{% endif %}
+      {% endfor %}
+      {% for block in blocks if block.block_type == 'skills' %}
+          {% if loop.first %}<section class="latex-section"><h2 class="latex-section-title">Technical Skills</h2>{% endif %}
+          {% include 'layout/skills.html' %}
+          {% if loop.last %}</section>{% endif %}
+      {% endfor %}
       {% for block in blocks if block.block_type == 'experience' %}
-          {% if loop.first %}<section class="experience"><h1>Experience</h1>{% endif %}
+          {% if loop.first %}<section class="latex-section"><h2 class="latex-section-title">Experience</h2>{% endif %}
           {% include 'layout/experience.html' %}
           {% if loop.last %}</section>{% endif %}
       {% endfor %}
-    </div>
+      {% for block in blocks if block.block_type == 'education' %}
+          {% if loop.first %}<section class="latex-section"><h2 class="latex-section-title">Education</h2>{% endif %}
+          {% include 'layout/education.html' %}
+          {% if loop.last %}</section>{% endif %}
+      {% endfor %}
+      {% for block in blocks if block.block_type == 'projects' %}
+          {% if loop.first %}<section class="latex-section"><h2 class="latex-section-title">Projects</h2>{% endif %}
+          {% include 'layout/projects.html' %}
+          {% if loop.last %}</section>{% endif %}
+      {% endfor %}
+    </main>
   </body>
 </html>"""
 
@@ -165,23 +196,25 @@ def create_new_template(name, output_dir=None):
         <a href="mailto:{{ value }}">{{ value }}</a>
     {% elif val_str and (val_str.startswith('+') or key == 'phone' or key == 'tel') %}
         <a href="tel:{{ value }}">{{ value }}</a>
-    {% elif val_str and (val_str.startswith('http') or val_str.startswith('www') or '.com' in val_str or '.org' in val_str or '.net' in val_str) %}
-        <a href="{{ value if val_str.startswith('http') else 'http://' ~ value }}">{{ key if (key and key != 'link' and key != 'url') else value }}</a>
+    {% elif val_str and (val_str.startswith('http') or val_str.startswith('www') or '.com' in val_str or '.org' in val_str or '.net' in val_str or '.io' in val_str) %}
+        {% set clean_link = value | replace('https://', '') | replace('http://', '') | replace('www.', '') %}
+        {% if clean_link.endswith('/') %}{% set clean_link = clean_link[:-1] %}{% endif %}
+        <a href="{{ value if val_str.startswith('http') else 'https://' ~ value }}">{{ key if (key and key not in ['link', 'url', 'portfolio', 'github', 'linkedin', 'website', 'other']) else clean_link }}</a>
     {% else %}
         <span>{{ value }}</span>
     {% endif %}
 {% endmacro %}
 
-<header>
-    <h1>{{ name }}</h1>
-    <h2>{{ job_title }}</h2>
-    <div class="links">
+<header class="latex-header">
+    <h1 class="latex-name">{{ name }}</h1>
+    {% if job_title %}<div class="latex-title">{{ job_title }}</div>{% endif %}
+    <div class="latex-contacts">
         {% for block in blocks if block.block_type == 'header' %}
             {% for key, value in block.other_info.items() %}
-                {{ render_header_item(key, value) }}
+                <span class="latex-contact-item">{{ render_header_item(key, value) }}</span>
             {% endfor %}
             {% for extra in block.extras %}
-                {{ render_header_item('', extra) }}
+                <span class="latex-contact-item">{{ render_header_item('', extra) }}</span>
             {% endfor %}
         {% endfor %}
     </div>
@@ -190,20 +223,88 @@ def create_new_template(name, output_dir=None):
     files = {
         'layout/layout.html': layout_content,
         'layout/header.html': header_content,
-        'layout/summary.html': "<div>{{ block.summary | format_text }}</div>",
-        'layout/skills.html': "<ul>{% for s in block.skills %}<li>{{ s }}</li>{% endfor %}</ul>",
-        'layout/experience.html': """<div>
-    <h2>{{ block.job_title }} at {{ block.company }}</h2>
-    {% if block.description is string %}
-        <p>{{ block.description | format_text }}</p>
-    {% else %}
-        <ul>{% for line in block.description %}<li>{{ line | format_text }}</li>{% endfor %}</ul>
+        'layout/summary.html': '<div class="latex-summary"><p>{{ block.summary | format_text }}</p></div>',
+        'layout/skills.html': """<div class="latex-skills">
+    <ul class="latex-skills-list">
+        {% for skill in block.skills %}
+        <li>
+            {% if ':' in skill %}
+                {% set parts = skill.split(':', 1) %}
+                <strong>{{ parts[0] }}:</strong>{{ parts[1] }}
+            {% else %}
+                {{ skill }}
+            {% endif %}
+        </li>
+        {% endfor %}
+    </ul>
+</div>""",
+        'layout/experience.html': """<div class="latex-entry">
+    <div class="latex-entry-header">
+        <div class="latex-entry-row">
+            <span class="latex-bold">{{ block.company }}</span>
+            {% if block.location %}<span class="latex-italic">{{ block.location }}</span>{% endif %}
+        </div>
+        <div class="latex-entry-row">
+            <span class="latex-italic">{{ block.job_title }}</span>
+            {% if block.date_range %}<span class="latex-date">{{ block.date_range }}</span>{% endif %}
+        </div>
+    </div>
+    {% if block.description %}
+        {% if block.description is string %}
+            <p class="latex-entry-desc">{{ block.description | format_text }}</p>
+        {% else %}
+            <ul class="latex-bullets">
+                {% for line in block.description %}
+                <li>{{ line | format_text }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
     {% endif %}
 </div>""",
-        'layout/education.html': "",
-        'layout/projects.html': ""
+        'layout/education.html': """<div class="latex-entry">
+    <div class="latex-entry-header">
+        <div class="latex-entry-row">
+            <span class="latex-bold">{{ block.institution }}</span>
+            {% if block.date %}<span class="latex-date">{{ block.date }}</span>{% endif %}
+        </div>
+        <div class="latex-entry-row">
+            <span class="latex-italic">{{ block.degree }}{% if block.field_of_study %} &mdash; {{ block.field_of_study }}{% endif %}</span>
+            {% if block.location %}<span class="latex-italic">{{ block.location }}</span>{% endif %}
+        </div>
+    </div>
+    {% if block.description %}
+        {% if block.description is string %}
+            <p class="latex-entry-desc">{{ block.description | format_text }}</p>
+        {% else %}
+            <ul class="latex-bullets">
+                {% for line in block.description %}
+                <li>{{ line | format_text }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>""",
+        'layout/projects.html': """<div class="latex-entry">
+    <div class="latex-entry-header">
+        <div class="latex-entry-row">
+            <span class="latex-bold">{{ block.title }}</span>
+            {% if block.date %}<span class="latex-date">{{ block.date }}</span>{% endif %}
+        </div>
+    </div>
+    {% if block.description %}
+        {% if block.description is string %}
+            <p class="latex-entry-desc">{{ block.description | format_text }}</p>
+        {% else %}
+            <ul class="latex-bullets">
+                {% for line in block.description %}
+                <li>{{ line | format_text }}</li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    {% endif %}
+</div>"""
     }
 
     for rel_path, content in files.items():
         with open(os.path.join(path, rel_path), 'w') as f: f.write(content)
-    print(f"Created template {name}")
+    print(f"Created template {name} (based on LaTeX)")

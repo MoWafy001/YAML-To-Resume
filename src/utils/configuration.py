@@ -33,7 +33,7 @@ def initialize_reinitialize_configurations(interactive: bool = True):
 
     # default configs to write as yaml
     default_configs = {
-        "default_template": "Default",
+        "default_template": "LaTeX",
         "default_inherit_strategy": "extend",
         "templates_dir": os.path.join(CONFIG_DIR, "templates")
     }

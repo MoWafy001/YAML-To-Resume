@@ -115,7 +115,7 @@ def parse_cli_arguments():
     # Build: Template Options
     build_parser.add_argument(
         "--template", "-t",
-        help="Name of a built-in template (e.g., 'Default') or a direct path to a custom template directory."
+        help="Name of a built-in template (e.g., 'LaTeX', 'Standard') or a direct path to a custom template directory."
     )
 
     # Build: Configs
