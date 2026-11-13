@@ -1,4 +1,4 @@
-<img width="930" height="589" alt="image" src="https://github.com/user-attachments/assets/34d729cc-bfb1-457a-bc40-68dcd681760b" />
+<img width="1865" height="1117" alt="image" src="https://github.com/user-attachments/assets/fdd37032-1cb2-4f6d-99ec-bce2cef995e8" />
 
 # YAML-To-Resume (`ytr`)
 
